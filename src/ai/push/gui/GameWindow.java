@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import ai.push.logic.Counter;
 import ai.push.logic.Settings;
+import ai.push.logic.Transition;
 
 
 @SuppressWarnings("serial")
@@ -28,7 +30,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 	Checker checker;
 	Point start;
 	JButton endTurn = new JButton("Koniec tury");
-	JButton pass = new JButton("Poddaje siê");
+	JButton pass = new JButton("Generuj");
 	JButton exit = new JButton("WyjdŸ");
 	public JProgressBar time1 = new JProgressBar(SwingConstants.VERTICAL, 0, 0);
 	public JProgressBar time2 = new JProgressBar(SwingConstants.VERTICAL, 0, 0);
@@ -88,7 +90,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 
 		counter.start();
 		endTurn.setEnabled(false);
-		pass.setEnabled(false);
+		//pass.setEnabled(false);
 		// new Finisher(this).start();
 	}
 
@@ -167,7 +169,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 	public void mouseReleased(MouseEvent e)
 	{
 	}
-
+	Vector<Transition> list;
 	public void actionPerformed(ActionEvent e)
 	{
 		Object src = e.getSource();
@@ -182,6 +184,8 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		}
 		else if (src == pass)
 		{
+			list=checker.game.generateTransitions();
+			System.out.println(list.size());
 		}
 		repaint();
 	}

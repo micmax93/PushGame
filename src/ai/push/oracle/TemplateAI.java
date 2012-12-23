@@ -1,12 +1,12 @@
-package ai.push.logic;
+package ai.push.oracle;
 
 import java.util.Random;
 
-public class AI extends Thread
+public class TemplateAI extends Thread
 {
 	Random rand = new Random();
 
-	AI()
+	TemplateAI()
 	{
 		super();
 	}

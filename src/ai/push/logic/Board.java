@@ -1,10 +1,12 @@
 package ai.push.logic;
 
+import java.util.Random;
 import java.util.Vector;
 
 public class Board
 {
 	public int tab[][];
+	final int size;
 
 	public int getValue(Field p)
 	{
@@ -18,7 +20,7 @@ public class Board
 
 	public Board()
 	{
-		int size = Settings.size;
+		size = Settings.size;
 		tab = new int[size][size];
 		for (int w = 0; w < size; w++)
 		{
@@ -41,7 +43,18 @@ public class Board
 			}
 		}
 	}
-
+	public Board(Board copy)
+	{
+		size=copy.size;
+		tab=new int[size][size];
+		for(int row=0;row<size;row++)
+		{
+			for(int column=0;column<size;column++)
+			{
+				tab[row][column]=copy.tab[row][column];
+			}
+		}
+	}
 	Vector<Field> getChain(Field origin, int angle)
 	{
 		Vector<Field> chain = new Vector<Field>();
@@ -123,5 +136,30 @@ public class Board
 			setValue(curr.origin, 0);
 		}
 		return true;
+	}	
+	public Vector<Transition> generateTransitions(int id)
+	{
+		Vector<Transition> result=new Vector<Transition>();
+		Random rand=new Random();
+		for(int row=0;row<size;row++)
+		{
+			for(int column=0;column<size;column++)
+			{
+				if(tab[row][column]==id)
+				{
+					Vector<Movement> movs=possibleMoves(new Field(row,column));
+					if(movs.size()>0)
+					{
+						result.add(new Transition(this, movs.get(0)));
+					}
+					for(int i=1;i<movs.size();i++)
+					{
+						result.add(rand.nextInt(result.size()),
+								new Transition(this, movs.get(i)));
+					}
+				}
+			}
+		}
+		return result;
 	}
 }

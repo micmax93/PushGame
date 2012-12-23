@@ -2,9 +2,11 @@ package ai.push.logic;
 
 import java.util.Vector;
 
+import ai.push.oracle.TemplateAI;
+
 public class Logic
 {
-	AI ai1, ai2;
+	TemplateAI ai1, ai2;
 	final int size;
 	public int turn;
 	Board board;
@@ -101,5 +103,9 @@ public class Logic
 			return board.execute(move);
 		}
 		return false;
+	}
+	public Vector<Transition> generateTransitions()
+	{
+		return board.generateTransitions(turn);
 	}
 }

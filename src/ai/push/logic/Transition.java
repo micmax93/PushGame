@@ -22,4 +22,8 @@ public class Transition
 			allMoves.add(new Movement(chain.get(i), mov.angle, mov.distance));
 		}
 	}
+	public Vector<Transition> getNextGeneration(int id)
+	{
+		return out.generateTransitions(id);
+	}
 }

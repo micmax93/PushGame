@@ -2,7 +2,8 @@ package ai.push.logic;
 
 import java.util.Vector;
 
-import ai.push.oracle.TemplateAI;
+import javax.swing.JFrame;
+
 
 public class Logic
 {
@@ -10,23 +11,55 @@ public class Logic
 	final int size;
 	public int turn;
 	Board board;
+	//JFrame refresher;
 
 	public Logic()
 	{
 		this.size = Settings.size;
 		board = new Board();
-		turn = 1;
+		turn = 2;
+		ai1=new TemplateAI();
+		ai2=new TemplateAI();
 	}
 
 	public int[][] getTab()
 	{
 		return board.tab;
 	}
+	
+//	public void setupRefreshTarget(JFrame win)
+//	{
+//		refresher=win;
+//	}
 
 	public int endTurn()
 	{
+//		if(refresher!=null)
+//			{refresher.repaint();}
 		turn = enemyID();
-		return hasFinished();
+		int winner=hasFinished();
+		if(winner!=0)
+		{
+			return winner;
+		}
+		else
+		{
+			if((turn==1)&&(Settings.AI1))
+			{
+				executeMove(ai1.choseBest(generateTransitions()));
+				return endTurn();
+			}
+			if((turn==2)&&(Settings.AI2))
+			{
+				executeMove(ai2.choseBest(generateTransitions()));
+				return endTurn();
+			}
+			else
+			{
+				return 0;
+			}
+			
+		}
 	}
 
 	int enemyID()

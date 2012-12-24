@@ -92,6 +92,8 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		endTurn.setEnabled(false);
 		//pass.setEnabled(false);
 		// new Finisher(this).start();
+		//checker.game.setupRefreshTarget(this);
+		checker.game.endTurn();
 	}
 
 	public void paint(Graphics g)
@@ -141,6 +143,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 				if (checker.perform(x, y))
 				{
 					checker.clearSelection();
+					repaint();
 					int winner = checker.game.endTurn();
 					if (winner != 0)
 					{

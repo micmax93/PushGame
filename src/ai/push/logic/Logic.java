@@ -2,24 +2,25 @@ package ai.push.logic;
 
 import java.util.Vector;
 
-import javax.swing.JFrame;
 
 
 public class Logic
 {
-	TemplateAI ai1, ai2;
+	AbstractAI ai1, ai2;
 	final int size;
 	public int turn;
 	Board board;
-	//JFrame refresher;
+	public Boolean edited;
+	public Boolean locked;
+	public int winner;
 
 	public Logic()
 	{
 		this.size = Settings.size;
 		board = new Board();
 		turn = 2;
-		ai1=new TemplateAI();
-		ai2=new TemplateAI();
+		edited=new Boolean(true);
+		locked=new Boolean(false);
 	}
 
 	public int[][] getTab()
@@ -27,36 +28,28 @@ public class Logic
 		return board.tab;
 	}
 	
-//	public void setupRefreshTarget(JFrame win)
-//	{
-//		refresher=win;
-//	}
 
-	public int endTurn()
+	public void endTurn()
 	{
-//		if(refresher!=null)
-//			{refresher.repaint();}
+		locked=true;
+		edited=true;
 		turn = enemyID();
 		int winner=hasFinished();
-		if(winner!=0)
-		{
-			return winner;
-		}
-		else
+		if(winner==0)
 		{
 			if((turn==1)&&(Settings.AI1))
 			{
-				executeMove(ai1.choseBest(generateTransitions()));
-				return endTurn();
+				ai1=new RandomAI(this);
+				ai1.start();
 			}
 			if((turn==2)&&(Settings.AI2))
 			{
-				executeMove(ai2.choseBest(generateTransitions()));
-				return endTurn();
+				ai2=new RandomAI(this);
+				ai2.start();
 			}
 			else
 			{
-				return 0;
+				locked=false;
 			}
 			
 		}

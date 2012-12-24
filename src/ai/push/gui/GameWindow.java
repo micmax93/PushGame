@@ -28,6 +28,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 	static public GameWindow curr;
 	Counter counter = new Counter(this);
 	Checker checker;
+	Refresher refresher;
 	Point start;
 	JButton endTurn = new JButton("Koniec tury");
 	JButton pass = new JButton("Generuj");
@@ -93,12 +94,16 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		//pass.setEnabled(false);
 		// new Finisher(this).start();
 		//checker.game.setupRefreshTarget(this);
+		refresher=new Refresher(this);
+		refresher.start();
 		checker.game.endTurn();
 	}
 
 	public void paint(Graphics g)
 	{
 		super.paint(g);
+		checker.game.edited=false;
+		
 		g.clearRect(0, 0, 560, getHeight());
 		g.drawImage(checker.getImg(), start.x, start.y, null);
 		g.setColor(Color.BLACK);
@@ -127,6 +132,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 
 	public void mouseClicked(MouseEvent e)
 	{
+		if(checker.game.locked) {return;}
 		int x = e.getX() - start.x;
 		int y = e.getY() - start.y;
 		int size = checker.size * checker.scale;
@@ -144,14 +150,9 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 				{
 					checker.clearSelection();
 					repaint();
-					int winner = checker.game.endTurn();
-					if (winner != 0)
-					{
-						JOptionPane.showMessageDialog(null,
-								"Gracz " + Integer.toString(winner)
-										+ " wygra³!!!");
-					}
+					checker.game.endTurn();
 				}
+				
 			}
 			repaint();
 		}
@@ -183,6 +184,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		else if (src == exit)
 		{
 			counter.finish();
+			refresher.finish();
 			this.dispose();
 		}
 		else if (src == pass)

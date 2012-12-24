@@ -1,5 +1,10 @@
 package ai.push.logic;
 
+/**
+ * Przechwuje wspó³rzêdne na szachownicy.
+ * @author micmax93
+ *
+ */
 public class Field
 {
 	public int row, column;
@@ -14,6 +19,9 @@ public class Field
 		this.column = column;
 	}
 
+	/**
+	 * Sprawdza czy wspó³rzêdne s¹ poprawne, czyli czy znajduj¹ siê na szachownicy.
+	 */
 	public boolean isValid()
 	{
 		if ((row >= 0) && (row < Settings.size))

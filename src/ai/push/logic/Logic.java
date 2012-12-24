@@ -8,12 +8,27 @@ public class Logic
 {
 	AbstractAI ai1, ai2;
 	final int size;
+	/**
+	 * Identyfikarot u¿ytkownika który ma tera ruch.
+	 */
 	public int turn;
 	Board board;
+	/**
+	 * Przedstawia czy zasz³y jakieœ zmiany na planszy.
+	 */
 	public Boolean edited;
+	/**
+	 * Blokada u¿ytkownika kiedy jest tura AI.
+	 */
 	public Boolean locked;
+	/**
+	 * Identyfikator zwyciêzcy, w trakcie gry 0.
+	 */
 	public int winner;
 
+	/**
+	 * Konstruktor inicjalizuj¹cy podstawowe pola.
+	 */
 	public Logic()
 	{
 		this.size = Settings.size;
@@ -23,12 +38,19 @@ public class Logic
 		locked=new Boolean(false);
 	}
 
+	/**
+	 * Pozwala na pobranie tablicy pionków.
+	 * @return
+	 * tablica 2D intów zawieraj¹ca odpowiednik aktualnego stanu planszy.
+	 */
 	public int[][] getTab()
 	{
 		return board.tab;
 	}
 	
-
+	/**
+	 * Zakoñczenie tury.
+	 */
 	public void endTurn()
 	{
 		locked=true;
@@ -55,6 +77,9 @@ public class Logic
 		}
 	}
 
+	/**
+	 * Zwraca identyfikator przeciwnika.
+	 */
 	int enemyID()
 	{
 		if (turn == 1)
@@ -67,6 +92,11 @@ public class Logic
 		}
 	}
 
+	/**
+	 * Sprawdza czy ktoœ wygra³.
+	 * @return
+	 * Identyfikator zwyciêzcy, je¿eli brak to 0.
+	 */
 	int hasFinished()
 	{
 		boolean won1 = true, won2 = true;
@@ -106,11 +136,21 @@ public class Logic
 		}
 	}
 
+	/**
+	 * Sprawdza czy z danego pola mozna wykonaæ ruch.
+	 */
 	public boolean isSelectable(int row, int column)
 	{
 		return (turn == board.tab[row][column]);
 	}
 
+	/**
+	 * Wyszukuje listê pól do których mo¿na przejœæ z danego pola.
+	 * @param origin
+	 * Pole Ÿród³³owe.
+	 * @return
+	 * Vector mo¿liwych pól docelowych.
+	 */
 	public Vector<Field> possibleDestinations(Field origin)
 	{
 		Vector<Movement> movs = board.possibleMoves(origin);
@@ -122,6 +162,12 @@ public class Logic
 		return destinations;
 	}
 
+	/**
+	 * Realizuje ruch.
+	 * Weryfikuje poprawnoœæ identyfikatora w³aœciciela.
+	 * @param move
+	 * Ruch do wykonania.
+	 */
 	public boolean executeMove(Movement move)
 	{
 		if (board.getValue(move.origin) == turn)
@@ -130,6 +176,12 @@ public class Logic
 		}
 		return false;
 	}
+	
+	/**
+	 * Generuje wszystkie wykonywalne ruchy dla aktualnie graj¹cego gracza.
+	 * @return
+	 * Vector tranzycji przedstawiaj¹cy wszystkie wykonywalny ruchy.
+	 */
 	public Vector<Transition> generateTransitions()
 	{
 		return board.generateTransitions(turn);

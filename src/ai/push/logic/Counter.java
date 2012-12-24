@@ -2,6 +2,10 @@ package ai.push.logic;
 
 import ai.push.gui.GameWindow;
 
+/**
+ * Licznik do odmierzania sumarycznego czasu wykorzystanego przez przez gracza. 
+ * @author micmax93
+ */
 public class Counter extends Thread
 {
 	int time[] = new int[3];
@@ -10,23 +14,45 @@ public class Counter extends Thread
 	boolean active;
 	GameWindow home;
 
+	/**
+	 * Zwraca czas dla danego gracza.
+	 * @param i
+	 * Identyfikator gracza.
+	 * @return
+	 * Czas w sekundach.
+	 */
 	public int getTime(int i)
 	{
 		return time[i];
 	}
 
+	/**
+	 * Zwraca czas dla danego gracza.
+	 * @param i
+	 * Identyfikator gracza.
+	 * @return
+	 * Czas w postaci sformatowanej.
+	 */
 	public String getTimeString(int i)
 	{
 		return ((new Integer(time[i] / 60).toString()) + ":" + (new Integer(
 				(time[i] / 10) % 6).toString()))
 				+ (new Integer(time[i] % 10).toString());
 	}
-
+	
+	/**
+	 * Ustawienie aktualnego gracza.
+	 * @param i
+	 * Identyfikator gracza.
+	 */
 	synchronized public void setTurn(int i)
 	{
 		turn = i;
 	}
 
+	/**
+	 * G³ówna pêtla w¹tku.
+	 */
 	public void run()
 	{
 		while (active)
@@ -45,7 +71,10 @@ public class Counter extends Thread
 			home.timer[3].setText(getTimeString(2));
 		}
 	}
-
+	
+	/**
+	 * Wyzerowanie licznika.
+	 */
 	public void reset()
 	{
 		count = 0;
@@ -55,6 +84,10 @@ public class Counter extends Thread
 		count = 1;
 	}
 
+	/**
+	 * Utworzenie licznika dla danego okna gry.
+	 * @param root
+	 */
 	public Counter(GameWindow root)
 	{
 		super();
@@ -63,6 +96,9 @@ public class Counter extends Thread
 		reset();
 	}
 
+	/**
+	 * Zakoñczenie pracy w¹tku.
+	 */
 	synchronized public void finish()
 	{
 		active = false;

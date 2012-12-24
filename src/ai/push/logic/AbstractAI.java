@@ -3,19 +3,33 @@ package ai.push.logic;
 import java.util.Vector;
 
 
-
+/**
+ * Klasa abstrakcyjna implementuj¹ca podstawow¹ integracje AI z gr¹.
+ * Uruchamiana jest jako osobny w¹tek.
+ * @author micmax93
+ */
 abstract public class AbstractAI extends Thread
 {
 	protected Logic game;
 	protected Vector<Transition> list;
 	protected Movement result;
 	int delay;
+	/**
+	 * Konstruktor incjalizuj¹cy AI.
+	 * @param logic
+	 * Referencja na logikê gry.
+	 */
 	AbstractAI(Logic logic)
 	{
 		super();
 		game=logic;
 		delay=1000;
 	}
+	
+	/**
+	 * Ustawienie opóŸnienia w mili sekundach.
+	 * @param d
+	 */
 	public void setDelay(int d)
 	{
 		if(d>=0)
@@ -23,8 +37,18 @@ abstract public class AbstractAI extends Thread
 			delay=d;
 		}
 	}
+	
+	/**
+	 * Algorytm który powinien wybraæ optymalny ruch i umieœciæ go w result.
+	 */
 	abstract protected void algorithm();
 	
+	/**
+	 * G³ówna funkcja w¹tku.
+	 * Generuje mo¿liwe ruchy oraz uruchamia algorytm.
+	 * Nastêpnie zleca wykonanie ruchu oraz koñczy swoj¹ turê.
+	 * Nie ma koniecznoœci przeci¹¿aniatej czêœci klasy.  
+	 */
 	public void run()
 	{
 		list=game.generateTransitions();

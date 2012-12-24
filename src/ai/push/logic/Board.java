@@ -8,16 +8,33 @@ public class Board
 	public int tab[][];
 	final int size;
 
+	/**
+	 * Zwraca wartoœæ pola na szachownicy.
+	 * @param p
+	 * Pole.
+	 * @return
+	 * Wartoœæ podanego Pola.
+	 */
 	public int getValue(Field p)
 	{
 		return tab[p.row][p.column];
 	}
 
+	/**
+	 * Ustawia wartoœæ pola.
+	 * @param p
+	 * Poke.
+	 * @param val
+	 * Wartoœæ nadawana polu.
+	 */
 	public void setValue(Field p, int val)
 	{
 		tab[p.row][p.column] = val;
 	}
 
+	/**
+	 * Konstruktor inicjalizuj¹cy wartoœci pól na szachownicy.
+	 */
 	public Board()
 	{
 		size = Settings.size;
@@ -43,6 +60,12 @@ public class Board
 			}
 		}
 	}
+	
+	/**
+	 * Konstruktor kopiuj¹cy.
+	 * @param copy
+	 * Plansza do skopiowania.
+	 */
 	public Board(Board copy)
 	{
 		size=copy.size;
@@ -55,6 +78,16 @@ public class Board
 			}
 		}
 	}
+	
+	/**
+	 * Wyszukuje ³añcuch(szereg) pionów pod danym k¹tem.
+	 * @param origin
+	 * Pole pocz¹tkowe.
+	 * @param angle
+	 * K¹t pod którym znajduje siê szereg wzglêdem pola pocz¹tkowego.
+	 * @return
+	 * Vector pól nale¿¹cych do szeregu.
+	 */
 	Vector<Field> getChain(Field origin, int angle)
 	{
 		Vector<Field> chain = new Vector<Field>();
@@ -79,6 +112,11 @@ public class Board
 		return chain;
 	}
 
+	/**
+	 * Sprawdza czy dany ruch jest wykonywalny.
+	 * @param mov
+	 * Ruch do sprawdzenia.
+	 */
 	public boolean isExecutable(Movement mov)
 	{
 		if (mov == null)
@@ -105,7 +143,14 @@ public class Board
 		}
 		return true;
 	}
-
+	
+	/**
+	 * Generuje listê wszstkich wykonywalnych ruchów z danego pola.
+	 * @param src
+	 * Pole Ÿród³owe.
+	 * @return
+	 * Vector mo¿liwych ruchów.
+	 */
 	public Vector<Movement> possibleMoves(Field src)
 	{
 		Vector<Movement> movs = new Vector<Movement>();
@@ -121,6 +166,11 @@ public class Board
 		return movs;
 	}
 
+	/**
+	 * Realizuje dany ruch.
+	 * @param mov
+	 * Ruch do wykonania.
+	 */
 	public boolean execute(Movement mov)
 	{
 		if (!isExecutable(mov))
@@ -137,6 +187,14 @@ public class Board
 		}
 		return true;
 	}	
+	
+	/**
+	 * Generuje wszystkie wykonywalne ruchy dla danego u¿ytkownika.
+	 * @param id
+	 * Identyfikator u¿ytkownika.
+	 * @return
+	 * Vector mo¿liwych ruchów.
+	 */
 	public Vector<Transition> generateTransitions(int id)
 	{
 		Vector<Transition> result=new Vector<Transition>();

@@ -2,6 +2,11 @@ package ai.push.logic;
 
 import java.awt.Color;
 
+/**
+ * Zawiera podstawowe ustawienia gry.
+ * @author micmax93
+ *
+ */
 public class Settings
 {
 	static public Color C1 = Color.BLUE, C2 = Color.RED;

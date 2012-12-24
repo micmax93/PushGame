@@ -1,10 +1,31 @@
 package ai.push.logic;
 
+/**
+ * Opisuje ruch pionka z jednego pola na drugie.
+ * @author micmax93
+ */
 public class Movement
 {
 	public Field origin, destination;
-	public int distance, angle;
+	public int distance;
+	/**
+	 * K¹t który jest zdefiniowany jako liczba ca³kowita z przedzia³u <0;7>.
+	 * K¹t jest zdefiniowany zgodnie z ruchem wskazówek zegara od 0.
+	 * 7 | 0 | 1
+	 * 6 | X | 2
+	 * 5 | 4 | 3
+	 */
+	public int angle;
 
+	/**
+	 * Konstruktor wyliczaj¹cy pole docelowe.
+	 * @param src
+	 * Pole Ÿród³owe.
+	 * @param ang
+	 * K¹t ruchu.
+	 * @param dist
+	 * Odleg³oœæ jak¹ przebêdzie ruch.
+	 */
 	public Movement(Field src, int ang, int dist)
 	{
 		origin = src;
@@ -35,12 +56,27 @@ public class Movement
 		destination.row = origin.row + distance * vert;
 		destination.column = origin.column + distance * horiz;
 	}
-
+	
+	/**
+	 * Konstruktor wyliczaj¹cy pole docelowe.
+	 * Za dystans przyjmujemy 1. 
+	 * @param src
+	 * Pole Ÿród³owe.
+	 * @param ang
+	 * K¹t ruchu.
+	 */
 	public Movement(Field src, int ang)
 	{
 		this(src, ang, 1);
 	}
 
+	/**
+	 * Konstruktor wyliczaj¹cy k¹t i odleg³oœæ.
+	 * @param src
+	 * Pole Ÿód³owe.
+	 * @param dest
+	 * Pole docelowe.
+	 */
 	public Movement(Field src, Field dest)
 	{
 		origin = src;
@@ -116,6 +152,9 @@ public class Movement
 		}
 	}
 
+	/**
+	 * Sprawdza czy ruch jest poprawny, ale bez uwzglêdnienia innych pionków.
+	 */
 	public boolean isValid()
 	{
 		if ((angle >= 0) && (angle < 8))
@@ -131,6 +170,10 @@ public class Movement
 		return false;
 	}
 
+	/**
+	 * Generuje ruch w którym pole docelowe jest przesuniête o pole dalej.
+	 * @return
+	 */
 	public Movement next()
 	{
 		Movement nxt = new Movement(origin, angle, distance + 1);

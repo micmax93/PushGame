@@ -56,7 +56,7 @@ public class Logic {
 		locked = true;
 		edited = true;
 		turn = enemyID();
-		int winner = hasFinished();
+		winner = hasFinished();
 		if (winner == 0) {
 			if ((turn == 1) && (Settings.AI1)) {
 //				ai1 = new RandomAI(this, Oracle.PLAYER.PLAYER1);

@@ -18,34 +18,42 @@ public class SettingsWindow extends JFrame implements ActionListener
 {
 	JLabel label1 = new JLabel("rozmiar");
 	JLabel label2 = new JLabel("iloœæ wierszy");
+	JLabel label3 = new JLabel("czas oczekiwania");
 	SizeSelection combo1 = new SizeSelection();
 	RowsSelection combo2 = new RowsSelection();
+	DelaySelection combo3 = new DelaySelection();
 	JButton exit = new JButton("zamknij");
 
 	public SettingsWindow()
 	{
 		super("Opcje");
 		// setMinimumSize(minimumSize)
-		setBounds(110, 110, 345, 380);
+		setBounds(160, 160, 190, 200);
 		setBackground(Color.GRAY);
 		setResizable(false);
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setEnabled(true);
 		setVisible(true);
 
-		label1.setBounds(50, 130, 100, 30);
+		label1.setBounds(10, 10, 100, 30);
 		add(label1);
-		combo1.setBounds(100, 130, 50, 30);
+		combo1.setBounds(120, 10, 50, 30);
 		combo1.addActionListener(this);
 		add(combo1);
 
-		label2.setBounds(50, 180, 130, 30);
+		label2.setBounds(10, 50, 130, 30);
 		add(label2);
-		combo2.setBounds(130, 180, 50, 30);
+		combo2.setBounds(120, 50, 50, 30);
 		combo2.addActionListener(this);
 		add(combo2);
 
-		exit.setBounds(190, 300, 100, 30);
+		label3.setBounds(10, 90, 130, 30);
+		add(label3);
+		combo3.setBounds(120, 90, 50, 30);
+		combo3.addActionListener(this);
+		add(combo3);
+
+		exit.setBounds(10, 130, 160, 30);
 		exit.addActionListener(this);
 		add(exit);
 
@@ -57,6 +65,7 @@ public class SettingsWindow extends JFrame implements ActionListener
 	{
 		combo1.setSelectedItem(Settings.size);
 		combo2.setSelectedItem(Settings.rowCount);
+		combo3.setSelectedItem((double)(Settings.delay)/1000);
 	}
 
 	public void paint(Graphics g)
@@ -71,6 +80,7 @@ public class SettingsWindow extends JFrame implements ActionListener
 		{
 			Settings.size = (Integer) combo1.getSelectedItem();
 			Settings.rowCount = (Integer) combo2.getSelectedItem();
+			Settings.delay= (int) ((double)combo3.getSelectedItem()*1000);
 			this.dispose();
 		}
 		repaint();
@@ -87,6 +97,21 @@ class SizeSelection extends JComboBox<Integer>
 		addItem(8);
 		addItem(10);
 		addItem(12);
+	}
+}
+
+@SuppressWarnings("serial")
+class DelaySelection extends JComboBox<Double>
+{
+	DelaySelection()
+	{
+		super();
+		addItem(0.0);
+		addItem(0.10);
+		addItem(0.25);
+		addItem(0.5);
+		addItem(0.75);
+		addItem(1.0);
 	}
 }
 

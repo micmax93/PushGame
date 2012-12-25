@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import ai.push.logic.Logic;
 import ai.push.logic.Movement;
+import ai.push.logic.Settings;
 import ai.push.logic.Transition;
 import ai.push.logic.oracle.Oracle;
 
@@ -30,7 +31,7 @@ public abstract class AbstractAI extends Thread {
 	AbstractAI(Logic logic, Oracle.PLAYER player) {
 		super();
 		game = logic;
-		delay = 1000;
+		delay = Settings.delay;
 		this.player = player;
 		oracle = null;
 	}

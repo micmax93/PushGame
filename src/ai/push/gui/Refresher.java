@@ -31,7 +31,7 @@ public class Refresher extends Thread
 			}
 			try
 			{
-				sleep(500);
+				sleep(200);
 			}
 			catch (InterruptedException e)
 			{

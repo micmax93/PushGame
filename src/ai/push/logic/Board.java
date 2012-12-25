@@ -19,6 +19,14 @@ public class Board
 	{
 		return tab[p.row][p.column];
 	}
+	
+	/**
+	 * Zwraca iloœæ wierszy/kolumn (d³ugoœæ boku) szachownicy.
+	 * @return Iloœæ pól boku szachownicy.
+	 */
+	public int getWidth() {
+		return tab.length;
+	}
 
 	/**
 	 * Ustawia wartoœæ pola.

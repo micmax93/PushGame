@@ -36,12 +36,12 @@ public class DistancesOracle extends Oracle {
 		int markPlayer2 = 0;
 		
 		
-			for (int r = 0; r < 8; ++r) {
-				for (int c = 0; c < 8; ++c) {
+			for (int r = 0; r < board.getWidth(); ++r) {
+				for (int c = 0; c < board.getWidth(); ++c) {
 					if (board.getValue(new Field(r, c)) == player1) {
 						markPlayer1 += r;
 					} else if (board.getValue(new Field(r, c)) == player2) {
-						markPlayer2 += 7 - r;
+						markPlayer2 += board.getWidth() - r - 1;
 					}
 				}
 			}

@@ -27,6 +27,7 @@ public class Refresher extends Thread
 				JOptionPane.showMessageDialog(null,
 						"Gracz " + Integer.toString(win)
 								+ " wygra³!!!");
+				active=false;
 			}
 			try
 			{

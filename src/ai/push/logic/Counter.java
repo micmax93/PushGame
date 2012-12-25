@@ -83,6 +83,14 @@ public class Counter extends Thread
 		time[2] = 1;
 		count = 1;
 	}
+	
+	/**
+	 * Wstrzymanie licznika
+	 */
+	public void pause()
+	{
+		count = 0;
+	}
 
 	/**
 	 * Utworzenie licznika dla danego okna gry.

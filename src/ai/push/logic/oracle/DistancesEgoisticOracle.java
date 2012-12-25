@@ -2,7 +2,6 @@ package ai.push.logic.oracle;
 
 import ai.push.logic.Board;
 import ai.push.logic.Field;
-import ai.push.logic.oracle.Oracle.PLAYER;
 
 /**
  * Distance-based egoistic Oracle.

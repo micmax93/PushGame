@@ -108,16 +108,8 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		g.setColor(Color.BLACK);
 		g.drawRect(start.x, start.y, checker.size * checker.scale, checker.size
 				* checker.scale);
-		/*
-		 * if(stl.Gra.turn==1) { g.setColor(OknoPionka.kolorPionka[0]); } else
-		 * if(stl.Gra.turn==2) { g.setColor(OknoPionka.kolorPionka[1]); }
-		 * g.fillOval(585, 80, 70, 70); int
-		 * c=g.getColor().getBlue()+g.getColor()
-		 * .getGreen()+g.getColor().getRed(); if(c<(1.5*255)) {g.setColor(new
-		 * Color(255,255,255));} else {g.setColor(new Color(0,0,0));}
-		 * g.drawOval(585, 80, 70, 70);
-		 */
-		counter.setTurn(checker.game.turn);
+
+		
 		g.setColor(Color.BLACK);
 		if (checker.game.turn == 1)
 		{
@@ -126,6 +118,15 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		else if (checker.game.turn == 2)
 		{
 			g.drawRect(570, 419, 120, 130);
+		}
+		
+		if(checker.game.winner==0)
+		{
+			counter.setTurn(checker.game.turn);
+		}
+		else
+		{
+			counter.pause();
 		}
 	}
 

@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import ai.push.logic.ai.AbstractAI;
 import ai.push.logic.ai.GreedyAI;
-import ai.push.logic.ai.RandomAI;
 import ai.push.logic.oracle.Oracle;
 
 public class Logic {
@@ -70,7 +69,6 @@ public class Logic {
 			} else {
 				locked = false;
 			}
-
 		}
 	}
 

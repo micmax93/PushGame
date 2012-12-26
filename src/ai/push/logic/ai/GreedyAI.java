@@ -1,8 +1,9 @@
 package ai.push.logic.ai;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
+import java.util.Vector;
 
 import ai.push.logic.Logic;
 import ai.push.logic.Transition;
@@ -26,38 +27,56 @@ public class GreedyAI extends AbstractAI {
 	 * Algorym wybiera zach³annie najbardziej korzystny ruch.
 	 */
 	protected void algorithm() {
-		//System.out.println("Greedy beg for player: " + player + " at: " + new Date());
-		Transition decision = null;
-		List<Transition> planB = new ArrayList<Transition>();
-		int max = Integer.MIN_VALUE;
-		int val = 0;
-		int previousMark = Integer.MIN_VALUE;
-		if (list.size() > 0) {
-			previousMark = oracle.getProphecy(list.firstElement().in, player);
-		}
-		else {
-			System.out.println("\tempty list!!");
-		}
-		
-		for(Transition t : list) {
-			val = oracle.getProphecy(t.out, player);
-			if (val < previousMark) {
-				planB.add(t);
-			}
-			if (val > max) {
-				max = val;
-				decision = t;
-			}
-		}
-		if (max == Integer.MIN_VALUE || decision == null)
-			result = list.get(new Random().nextInt(list.size())).mainMove;
-		else {
-			if (max == previousMark && (! planB.isEmpty()))
-				result = planB.get(new Random().nextInt(planB.size())).mainMove;
-			else
-				result = decision.mainMove;	
-		}
-		//System.out.println("Greedy end for player: " + player + " at: " + new Date());
-	}
+		List<Transition> listSorted = list;
+		Collections.sort(listSorted, new Comparator<Transition>() {
 
+			@Override
+			public int compare(Transition t1, Transition t2) {
+				int val1 = oracle.getProphecy(t1.out, player);
+				int val2 = oracle.getProphecy(t2.out, player);
+				if (val1 > val2)
+					return -1;
+				if (val1 < val2)
+					return 1;
+				else
+					return 0;
+			}
+		});
+		Transition decision = listSorted.get(0);
+		boolean found = false;
+		Vector<Transition> next;
+		
+		int opponentId = 0;
+		Oracle.PLAYER opponent;
+		if(player == Oracle.PLAYER.PLAYER1) {
+			opponentId = 2;
+			opponent = Oracle.PLAYER.PLAYER2;
+		}
+		else {
+			opponentId = 1;
+			opponent = Oracle.PLAYER.PLAYER1;
+		}
+		if (oracle.getProphecy(list.get(0).in, player) <= oracle.getProphecy(
+				listSorted.get(0).out, player)) {
+			// brak poprawy
+			//System.out.println("Mo¿liwa kolizja! " + new Date());
+			for (Transition t : listSorted) {
+				next = t.getNextGeneration(opponentId);
+				for (Transition n : next) {
+					if (oracle.getProphecy(n.in, opponent) < oracle.getProphecy(n.out, opponent)) {
+						// przeciwnik posiada jakikolwiek ruch poprawiaj¹cy
+						decision = t;
+						found = true;
+						break;
+					}
+				}
+				if (found) {
+					break;
+				}
+			}
+			//if (! found)
+				//System.out.println("\tnie znaleziono ruchu...");
+		}
+		result = decision.mainMove;
+	}
 }

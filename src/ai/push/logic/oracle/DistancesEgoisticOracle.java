@@ -32,24 +32,25 @@ public class DistancesEgoisticOracle extends Oracle {
 	 */
 	@Override
 	public int getProphecy(Board board, PLAYER player) {
-		int markPlayer1 = 0;
-		int markPlayer2 = 0;
+		int markPlayer = 0;
 
-		for (int r = 0; r < board.getWidth(); ++r) {
-			for (int c = 0; c < board.getWidth(); ++c) {
-				if (board.getValue(new Field(r, c)) == player1
-						&& player == PLAYER.PLAYER1) {
-					markPlayer1 += r;
-				} else if (board.getValue(new Field(r, c)) == player2
-						&& player == PLAYER.PLAYER2) {
-					markPlayer2 += board.getWidth() - r -1;
+		if (player == PLAYER.PLAYER1) {
+			for (int r = 0; r < board.getWidth(); ++r) {
+				for (int c = 0; c < board.getWidth(); ++c) {
+					if (board.getValue(new Field(r, c)) == player1) {
+						markPlayer += r;
+					}
+				}
+			}
+		} else {
+			for (int r = 0; r < board.getWidth(); ++r) {
+				for (int c = 0; c < board.getWidth(); ++c) {
+					if (board.getValue(new Field(r, c)) == player2) {
+						markPlayer += board.getWidth() - r - 1;
+					}
 				}
 			}
 		}
-
-		if (player == PLAYER.PLAYER1)
-			return markPlayer1;
-		else
-			return markPlayer2;
+		return markPlayer;
 	}
 }

@@ -21,12 +21,12 @@ public abstract class AbstractAI extends Thread {
 	protected int delay;
 	protected Oracle.PLAYER player;
 	protected Oracle oracle;
+	protected int maxDepth;
 
 	/*
 	 * Konstruktor incjalizuj¹cy AI.
 	 * 
-	 * @param logic
-	 *            Referencja na logikê gry.
+	 * @param logic Referencja na logikê gry.
 	 */
 	AbstractAI(Logic logic, Oracle.PLAYER player) {
 		super();
@@ -45,6 +45,19 @@ public abstract class AbstractAI extends Thread {
 		if (d >= 0) {
 			delay = d;
 		}
+	}
+
+	/**
+	 * Ustawienie maksymalnej g³êbokoœci dla algorytmu przeszukiwania. Mo¿liwe
+	 * tylko dla algorytmów obs³uguj¹cych takie ograniczenia.
+	 * 
+	 * @param depth
+	 *            Maksymalna g³êbokoœæ przeszukiwania (0 - przeszukiwanie a¿ do
+	 *            wyczerpania zasobów; > 0 - nowa g³êbokoœæ).
+	 */
+	public void setMaxDepth(int depth) {
+		if (depth >= 0)
+			this.maxDepth = depth;
 	}
 
 	/**

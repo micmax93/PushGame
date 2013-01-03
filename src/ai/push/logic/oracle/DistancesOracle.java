@@ -34,18 +34,17 @@ public class DistancesOracle extends Oracle {
 	public int getProphecy(Board board, PLAYER player) {
 		int markPlayer1 = 0;
 		int markPlayer2 = 0;
-		
-		
-			for (int r = 0; r < board.getWidth(); ++r) {
-				for (int c = 0; c < board.getWidth(); ++c) {
-					if (board.getValue(new Field(r, c)) == player1) {
-						markPlayer1 += r;
-					} else if (board.getValue(new Field(r, c)) == player2) {
-						markPlayer2 += board.getWidth() - r - 1;
-					}
+
+		for (int r = 0; r < board.getWidth(); ++r) {
+			for (int c = 0; c < board.getWidth(); ++c) {
+				if (board.getValue(new Field(r, c)) == player1) {
+					markPlayer1 += r;
+				} else if (board.getValue(new Field(r, c)) == player2) {
+					markPlayer2 += board.getWidth() - r - 1;
 				}
 			}
-		
+		}
+
 		if (player == PLAYER.PLAYER1)
 			return markPlayer1 - markPlayer2;
 		else

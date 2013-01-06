@@ -35,7 +35,7 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 		setBounds(100, 100, 500, 380);
 		setBackground(Color.GRAY);
 		setResizable(false);
-		// setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setEnabled(true);
 		setVisible(true);
 

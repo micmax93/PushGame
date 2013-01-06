@@ -46,7 +46,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener,
 		setBounds(10, 10, 700, 600);
 		setBackground(Color.GRAY);
 		setResizable(false);
-		// setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setEnabled(true);
 		setVisible(true);
 		addMouseListener(this);

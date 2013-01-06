@@ -53,10 +53,12 @@ public class Logic {
 	 * Zakoñczenie tury.
 	 */
 	public void endTurn() {
+		if(winner<0) {return;}
 		locked = true;
 		edited = true;
 		turn = enemyID();
 		winner = hasFinished();
+		
 		if (winner == 0) {
 			if ((turn == 1) && (Settings.AI1)) {
 //				ai1 = new RandomAI(this, Oracle.PLAYER.PLAYER1);

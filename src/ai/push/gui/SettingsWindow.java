@@ -31,7 +31,7 @@ public class SettingsWindow extends JFrame implements ActionListener
 		setBounds(160, 160, 190, 200);
 		setBackground(Color.GRAY);
 		setResizable(false);
-		// setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setEnabled(true);
 		setVisible(true);
 

@@ -20,6 +20,7 @@ public abstract class AbstractAI extends Thread {
 	protected Movement result;
 	protected int delay;
 	protected Oracle.PLAYER player;
+	protected Oracle.PLAYER opponent;
 	protected Oracle oracle;
 	protected int maxDepth;
 
@@ -33,6 +34,10 @@ public abstract class AbstractAI extends Thread {
 		game = logic;
 		delay = Settings.delay;
 		this.player = player;
+		if (player == Oracle.PLAYER.PLAYER1)
+			opponent = Oracle.PLAYER.PLAYER2;
+		else
+			opponent = Oracle.PLAYER.PLAYER1;
 		oracle = null;
 	}
 

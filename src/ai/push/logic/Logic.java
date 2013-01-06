@@ -3,6 +3,7 @@ package ai.push.logic;
 import java.util.Vector;
 
 import ai.push.logic.ai.AbstractAI;
+import ai.push.logic.ai.AlphaBetaAI;
 import ai.push.logic.ai.GreedyAI;
 import ai.push.logic.oracle.Oracle;
 
@@ -60,11 +61,13 @@ public class Logic {
 			if ((turn == 1) && (Settings.AI1)) {
 //				ai1 = new RandomAI(this, Oracle.PLAYER.PLAYER1);
 				ai1 = new GreedyAI(this, Oracle.PLAYER.PLAYER1);
+//				ai1 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER1);
 				ai1.start();
 			}
 			if ((turn == 2) && (Settings.AI2)) {
 //				ai2 = new RandomAI(this, Oracle.PLAYER.PLAYER2);
 				ai2 = new GreedyAI(this, Oracle.PLAYER.PLAYER2);
+//				ai2 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER2);
 				ai2.start();
 			} else {
 				locked = false;

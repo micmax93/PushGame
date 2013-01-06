@@ -169,6 +169,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener,
 		{
 			checker.game.winner=-1;
 		}
+		
 	}
 	
 	Vector<Transition> list;

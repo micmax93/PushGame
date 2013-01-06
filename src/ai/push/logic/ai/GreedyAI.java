@@ -1,6 +1,7 @@
 package ai.push.logic.ai;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -28,6 +29,8 @@ public class GreedyAI extends AbstractAI {
 	 * Algorym wybiera zach³annie najbardziej korzystny ruch.
 	 */
 	protected void algorithm() {
+		System.out.println("G " + new Date());
+		
 		List<Transition> listSorted = list;
 		Collections.sort(listSorted, new TransitionComparator(oracle, player, ORDER.DESC));
 		Transition decision = listSorted.get(0);

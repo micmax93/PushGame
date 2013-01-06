@@ -19,6 +19,13 @@ public abstract class Oracle {
 	protected int player2;
 
 	public abstract int getProphecy(Board board, PLAYER player);
+	
+	public int getProphecy(Board board, int player) {
+		if (player == 1)
+			return getProphecy(board, Oracle.PLAYER.PLAYER1);
+		else
+			return getProphecy(board, Oracle.PLAYER.PLAYER2);
+	}
 
 	public int getPlayer1Symbol() {
 		return player1;

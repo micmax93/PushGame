@@ -35,6 +35,8 @@ public class Transition
 	 */
 	public Board out;
 	
+	protected Transition() {}
+	
 	/**
 	 * Konstruktor.
 	 * @param beg
@@ -42,7 +44,7 @@ public class Transition
 	 * @param mov
 	 * Ruch do opisania.
 	 */
-	Transition(Board beg,Movement mov)
+	public Transition(Board beg,Movement mov)
 	{
 		in=beg;
 		out=new Board(beg);

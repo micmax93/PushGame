@@ -22,7 +22,7 @@ public class Refresher extends Thread
 				window.repaint();
 			}
 			int win=window.checker.game.winner;
-			if (win != 0)
+			if (win > 0)
 			{
 				JOptionPane.showMessageDialog(null,
 						"Gracz " + Integer.toString(win)

@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -22,7 +24,7 @@ import ai.push.logic.Transition;
 
 
 @SuppressWarnings("serial")
-public class GameWindow extends JFrame implements MouseListener, ActionListener
+public class GameWindow extends JFrame implements MouseListener, ActionListener, WindowListener
 {
 	static public GameWindow curr;
 	Counter counter = new Counter(this);
@@ -48,6 +50,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		setEnabled(true);
 		setVisible(true);
 		addMouseListener(this);
+		addWindowListener(this);
 		setLayout(null);
 		start = new Point(20, 50);
 		checker = new Checker(createImage(500, 500), Settings.size);
@@ -157,22 +160,17 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 			repaint();
 		}
 	}
-
-	public void mouseEntered(MouseEvent e)
+	
+	void onExit()
 	{
+		counter.finish();
+		refresher.finish();
+		if(checker.game.winner==0)
+		{
+			checker.game.winner=-1;
+		}
 	}
-
-	public void mouseExited(MouseEvent e)
-	{
-	}
-
-	public void mousePressed(MouseEvent e)
-	{
-	}
-
-	public void mouseReleased(MouseEvent e)
-	{
-	}
+	
 	Vector<Transition> list;
 	public void actionPerformed(ActionEvent e)
 	{
@@ -183,8 +181,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		}
 		else if (src == exit)
 		{
-			counter.finish();
-			refresher.finish();
+			onExit();
 			this.dispose();
 		}
 		else if (src == pass)
@@ -194,4 +191,21 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener
 		}
 		repaint();
 	}
+
+	@Override
+	public void windowClosing(WindowEvent e)
+	{
+		onExit();
+	}
+
+	public void windowClosed(WindowEvent e){}
+	public void windowActivated(WindowEvent e){}
+	public void windowDeactivated(WindowEvent e){}
+	public void windowDeiconified(WindowEvent e){}
+	public void windowIconified(WindowEvent e){}
+	public void windowOpened(WindowEvent e){}
+	public void mouseEntered(MouseEvent e){}
+	public void mouseExited(MouseEvent e){}
+	public void mousePressed(MouseEvent e){}
+	public void mouseReleased(MouseEvent e){}
 }

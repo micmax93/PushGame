@@ -1,13 +1,17 @@
 package ai.push.logic.ai;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 import ai.push.logic.Board;
 import ai.push.logic.Logic;
 import ai.push.logic.Settings;
 import ai.push.logic.Transition;
+import ai.push.logic.oracle.DistancesEgoisticOracle;
 import ai.push.logic.oracle.DistancesOracle;
 import ai.push.logic.oracle.Oracle;
+import ai.push.logic.oracle.TransitionComparator;
 
 /**
  * Przyk³adowa implementacja AI dla modelu z odciêciami alfa-beta.
@@ -18,7 +22,8 @@ import ai.push.logic.oracle.Oracle;
 public class AlphaBetaAI extends AbstractAI {
 	public AlphaBetaAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
-		oracle = new DistancesOracle(1, 2);
+//		oracle = new DistancesOracle(1, 2);
+		oracle = new DistancesEgoisticOracle(1, 2);
 	}
 
 	private boolean isGameOver(Board board) {
@@ -45,14 +50,20 @@ public class AlphaBetaAI extends AbstractAI {
 	}
 
 	public int alphaBeta(Transition transition, int depth, int alpha, int beta,
-			int player, int nextGen) {
+			int player) {
 		if ((depth == 0) || isGameOver(transition.in))
-			return 100+oracle.getProphecy(transition.in, player);
+			return oracle.getProphecy(transition.out, player); // player
 
-		Vector<Transition> moves = transition.getNextGeneration(player);
+		List<Transition> moves = transition.getNextGeneration(player); // was: Vector
+		if (player == 1) {
+			Collections.sort(moves, new TransitionComparator(oracle, Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
+		}
+		else {
+			Collections.sort(moves, new TransitionComparator(oracle, Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
+		}
 		int value;
 		for (Transition m : moves) {
-			value = -alphaBeta(m, depth - 1, -beta, -alpha, player, 3 - nextGen);
+			value = -alphaBeta(m, depth - 1, -beta, -alpha, 3 - player);
 			if (value > alpha)
 				alpha = value;
 			if (alpha >= beta) {
@@ -70,7 +81,7 @@ public class AlphaBetaAI extends AbstractAI {
 	 * zostanie przyjêta wartoœæ domyslna.
 	 */
 	protected void algorithm() {
-		maxDepth = 4;
+		maxDepth = 6;
 		Transition decision = null;
 		
 		int plr;
@@ -85,16 +96,18 @@ public class AlphaBetaAI extends AbstractAI {
 		int alpha = Integer.MIN_VALUE+1;
 		int beta = Integer.MAX_VALUE-1;
 		
-		System.out.println("SIZE=" + list.size());
+		//System.out.println("SIZE=" + list.size());
+		
+		Collections.sort(list, new TransitionComparator(oracle, player, TransitionComparator.ORDER.DESC));
 		
 		for (Transition t : list) {
-			temp = -alphaBeta(t, maxDepth-1, -beta, -alpha, plr, 3 - plr);
+			temp = -alphaBeta(t, maxDepth-1, -beta, -alpha, 3 - plr);
 			if (temp > alpha) {
 				alpha = temp;
-				System.out.println("NOWA ALFA");
+				//System.out.println("NOWA ALFA");
 			}
 			if (alpha >= beta) {
-				System.out.println("ODCIÊCIE!");
+				//System.out.println("ODCIÊCIE!");
 				break;
 			}
 			if (temp > decisionVal) {
@@ -108,7 +121,7 @@ public class AlphaBetaAI extends AbstractAI {
 		if (decision == null) {
 			System.out.println("DECISION ERROR!");
 		}
-
+		
 		result = decision.mainMove;
 	}
 }

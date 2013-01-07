@@ -62,8 +62,8 @@ public class Logic {
 		if (winner == 0) {
 			if ((turn == 1) && (Settings.AI1)) {
 //				ai1 = new RandomAI(this, Oracle.PLAYER.PLAYER1);
-				ai1 = new GreedyAI(this, Oracle.PLAYER.PLAYER1);
-//				ai1 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER1);
+//				ai1 = new GreedyAI(this, Oracle.PLAYER.PLAYER1);
+				ai1 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER1);
 				ai1.start();
 			}
 			if ((turn == 2) && (Settings.AI2)) {

@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import ai.push.logic.Logic;
 import ai.push.logic.Transition;
+import ai.push.logic.oracle.DistancesEgoisticOracle;
 import ai.push.logic.oracle.DistancesOracle;
 import ai.push.logic.oracle.Oracle;
 import ai.push.logic.oracle.TransitionComparator;
@@ -21,7 +22,7 @@ import ai.push.logic.oracle.TransitionComparator.ORDER;
 public class GreedyAI extends AbstractAI {
 	public GreedyAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
-		oracle = new DistancesOracle(1, 2);
+		oracle = new DistancesEgoisticOracle(1, 2);
 	}
 
 	@Override

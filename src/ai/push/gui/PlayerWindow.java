@@ -32,7 +32,7 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 	public PlayerWindow()
 	{
 		super("Pionek");
-		setBounds(100, 100, 500, 380);
+		setBounds(100, 100, 620, 380);
 		setBackground(Color.GRAY);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -47,7 +47,7 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 		add(rb1);
 		add(rb2);
 
-		cc1.setBounds(0, 40, 500, 400);
+		cc1.setBounds(0, 40, 620, 400);
 		add(cc1);
 		setLayout(null);
 		rb1.addActionListener(this);

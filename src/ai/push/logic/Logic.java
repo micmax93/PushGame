@@ -1,5 +1,11 @@
 package ai.push.logic;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 import ai.push.logic.ai.AbstractAI;
@@ -14,7 +20,7 @@ public class Logic {
 	 * Identyfikarot u¿ytkownika który ma tera ruch.
 	 */
 	public int turn;
-	Board board;
+	protected Board board;
 	/**
 	 * Przedstawia czy zasz³y jakieœ zmiany na planszy.
 	 */
@@ -36,7 +42,7 @@ public class Logic {
 		board = new Board();
 		turn = 2;
 		edited = new Boolean(true);
-		locked = new Boolean(false);
+		locked = new Boolean(true);
 	}
 
 	/**
@@ -55,6 +61,11 @@ public class Logic {
 	public void endTurn() {
 		if(winner<0) {return;}
 		locked = true;
+		if(pause>=0)
+		{
+			pause++;
+			return;
+		}
 		edited = true;
 		turn = enemyID();
 		winner = hasFinished();
@@ -66,7 +77,7 @@ public class Logic {
 				ai1 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER1);
 				ai1.start();
 			}
-			if ((turn == 2) && (Settings.AI2)) {
+			else if ((turn == 2) && (Settings.AI2)) {
 //				ai2 = new RandomAI(this, Oracle.PLAYER.PLAYER2);
 				ai2 = new GreedyAI(this, Oracle.PLAYER.PLAYER2);
 //				ai2 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER2);
@@ -162,5 +173,43 @@ public class Logic {
 	 */
 	public Vector<Transition> generateTransitions() {
 		return board.generateTransitions(turn);
+	}
+	
+	int pause=-1;
+	public void holdGame()
+	{
+		pause++;
+		locked=true;
+	}
+	public void resumeGame()
+	{
+		if(pause>0)
+		{
+			pause=-1;
+			endTurn();
+		}
+		else
+		{
+			locked=false;
+			pause=-1;
+		}
+	}
+	
+	public void saveToFile(String fname) throws IOException
+	{
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fname,false));
+	    out.writeObject(turn);
+	    out.writeObject(board);
+	    out.close();
+	}
+	
+	public void loadFromFile(String fname) throws FileNotFoundException, IOException, ClassNotFoundException
+	{
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(fname));
+	    turn = (int) in.readObject();
+	    board = (Board) in.readObject();
+	    in.close();
+	    Settings.size=board.size;
+	    Settings.rowCount=board.rowcount;
 	}
 }

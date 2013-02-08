@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.util.Vector;
 
+import ai.push.logic.DummyLogic;
 import ai.push.logic.Field;
 import ai.push.logic.Logic;
 import ai.push.logic.Movement;
@@ -40,6 +41,15 @@ public class Checker
 			}
 		}
 		selected = null;
+	}
+	
+	public Checker(Image img, int size,boolean editable)
+	{
+		this(img,size);
+		if(editable)
+		{
+			game=new DummyLogic();
+		}
 	}
 
 	public void clearSelection()

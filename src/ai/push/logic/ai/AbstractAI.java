@@ -1,6 +1,6 @@
 package ai.push.logic.ai;
 
-import java.util.Vector;
+import java.util.List;
 
 import ai.push.logic.Logic;
 import ai.push.logic.Movement;
@@ -16,7 +16,7 @@ import ai.push.logic.oracle.Oracle;
  */
 public abstract class AbstractAI extends Thread {
 	protected Logic game;
-	protected Vector<Transition> list;
+	protected List<Transition> list;
 	protected Movement result;
 	protected int delay;
 	protected Oracle.PLAYER player;
@@ -24,7 +24,7 @@ public abstract class AbstractAI extends Thread {
 	protected Oracle oracle;
 	protected int maxDepth;
 
-	/*
+	/**
 	 * Konstruktor incjalizuj¹cy AI.
 	 * 
 	 * @param logic Referencja na logikê gry.
@@ -44,7 +44,6 @@ public abstract class AbstractAI extends Thread {
 	/**
 	 * Ustawienie opóŸnienia w milisekundach.
 	 * 
-	 * @param d
 	 */
 	public void setDelay(int d) {
 		if (d >= 0) {
@@ -73,19 +72,21 @@ public abstract class AbstractAI extends Thread {
 	/**
 	 * G³ówna funkcja w¹tku. Generuje mo¿liwe ruchy oraz uruchamia algorytm.
 	 * Nastêpnie zleca wykonanie ruchu oraz koñczy swoj¹ turê. Nie ma
-	 * koniecznoœci przeci¹¿aniatej czêœci klasy.
+	 * koniecznoœci przeci¹¿ania tej czêœci klasy.
 	 */
 	public void run() {
 		list = game.generateTransitions();
 		algorithm();
 
-		try {
-			Thread.sleep(delay);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (delay != 0) {
+			try {
+				Thread.sleep(delay);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
+		
 		game.executeMove(result);
 		game.endTurn();
 	}

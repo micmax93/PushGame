@@ -26,29 +26,24 @@ public class Movement
 	 * @param dist
 	 * Odleg³oœæ jak¹ przebêdzie ruch.
 	 */
-	public Movement(Field src, int ang, int dist)
-	{
+	public Movement(Field src, int ang, int dist) {
 		origin = src;
 		distance = dist;
 		angle = ang;
 
 		int vert = 0, horiz = 0;
 
-		if ((angle > 0) && (angle < 4))
-		{
+		if ((angle > 0) && (angle < 4)) {
 			horiz = 1;
 		}
-		if ((angle > 4) && (angle < 8))
-		{
+		if ((angle > 4) && (angle < 8)) {
 			horiz = -1;
 		}
 
-		if ((angle < 2) || (angle > 6))
-		{
+		if ((angle < 2) || (angle > 6)) {
 			vert = -1;
 		}
-		if ((angle > 2) && (angle < 6))
-		{
+		if ((angle > 2) && (angle < 6)) {
 			vert = 1;
 		}
 
@@ -65,8 +60,7 @@ public class Movement
 	 * @param ang
 	 * K¹t ruchu.
 	 */
-	public Movement(Field src, int ang)
-	{
+	public Movement(Field src, int ang) {
 		this(src, ang, 1);
 	}
 
@@ -77,92 +71,70 @@ public class Movement
 	 * @param dest
 	 * Pole docelowe.
 	 */
-	public Movement(Field src, Field dest)
-	{
+	public Movement(Field src, Field dest) {
 		origin = src;
 		destination = dest;
 
 		int vert = destination.row - origin.row;
 		int horiz = destination.column - origin.column;
 
-		if (vert == 0)
-		{
-			if (horiz > 0)
-			{
+		if (vert == 0) {
+			if (horiz > 0) {
 				angle = 2;
 				distance = horiz;
-			}
-			else if (horiz < 0)
-			{
+			} else if (horiz < 0) {
 				angle = 6;
 				distance = -horiz;
-			}
-			else
-			{
+			} else {
 				angle = -1;
 				distance = 0;
 			}
-		}
-		else if (horiz == 0)
-		{
-			if (vert > 0)
-			{
+		} else if (horiz == 0) {
+			if (vert > 0) {
 				angle = 4;
 				distance = vert;
-			}
-			else if (vert < 0)
-			{
+			} else if (vert < 0) {
 				angle = 0;
 				distance = -vert;
 			}
-		}
-		else
-		{
-			if (Math.abs(vert) == Math.abs(horiz))
-			{
+		} else {
+			if (Math.abs(vert) == Math.abs(horiz)) {
 				distance = Math.abs(vert);
-				if (vert < 0)
-				{
-					if (horiz > 0)
-					{
+				if (vert < 0) {
+					if (horiz > 0) {
 						angle = 1;
-					}
-					else
-					{
+					} else {
 						angle = 7;
 					}
-				}
-				else
-				{
-					if (horiz > 0)
-					{
+				} else {
+					if (horiz > 0) {
 						angle = 3;
-					}
-					else
-					{
+					} else {
 						angle = 5;
 					}
 				}
-			}
-			else
-			{
+			} else {
 				angle = -1;
 				distance = 0;
 			}
 		}
 	}
-
+	
+	public Movement(Movement movement) {
+		this.origin = new Field(movement.origin);
+		this.destination = new Field(movement.destination);
+		this.distance = movement.distance;
+		this.angle = movement.angle;
+	}
+	
+	
 	/**
 	 * Sprawdza czy ruch jest poprawny, ale bez uwzglêdnienia innych pionków.
 	 */
-	public boolean isValid()
-	{
-		if ((angle >= 0) && (angle < 8))
-		{
-			if ((distance > 0) && (distance <= 3))
-			{
-				if (origin.isValid() && destination.isValid())
-				{
+	public boolean isValid() {
+		if ((angle >= 0) && (angle < 8)) {
+			if ((distance > 0) && (distance <= 3)) {
+				if (origin.isValid() && destination.isValid()) {
 					return true;
 				}
 			}
@@ -174,15 +146,11 @@ public class Movement
 	 * Generuje ruch w którym pole docelowe jest przesuniête o pole dalej.
 	 * @return
 	 */
-	public Movement next()
-	{
+	public Movement next() {
 		Movement nxt = new Movement(origin, angle, distance + 1);
-		if (nxt.isValid())
-		{
+		if (nxt.isValid()) {
 			return nxt;
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}

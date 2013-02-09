@@ -1,7 +1,8 @@
 package ai.push.logic;
 
-import java.util.Random;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Board
 {
@@ -94,11 +95,11 @@ public class Board
 	 * @param angle
 	 * K¹t pod którym znajduje siê szereg wzglêdem pola pocz¹tkowego.
 	 * @return
-	 * Vector pól nale¿¹cych do szeregu.
+	 * Lista pól nale¿¹cych do szeregu.
 	 */
-	Vector<Field> getChain(Field origin, int angle)
+	List<Field> getChain(Field origin, int angle)
 	{
-		Vector<Field> chain = new Vector<Field>();
+		List<Field> chain = new ArrayList<Field>();
 		chain.add(origin);
 
 		int id = getValue(origin);
@@ -135,8 +136,8 @@ public class Board
 		{
 			return false;
 		}
-
-		Field last = getChain(mov.origin, mov.angle).lastElement();
+		List<Field> lst = getChain(mov.origin, mov.angle);
+		Field last = lst.get(lst.size() - 1);//lastElement();
 		for (int d = 1; d <= mov.distance; d++)
 		{
 			Movement lastMove = new Movement(last, mov.angle, d);
@@ -157,11 +158,11 @@ public class Board
 	 * @param src
 	 * Pole Ÿród³owe.
 	 * @return
-	 * Vector mo¿liwych ruchów.
+	 * Lista mo¿liwych ruchów.
 	 */
-	public Vector<Movement> possibleMoves(Field src)
+	public List<Movement> possibleMoves(Field src)
 	{
-		Vector<Movement> movs = new Vector<Movement>();
+		List<Movement> movs = new ArrayList<Movement>();
 		for (int ang = 0; ang < 8; ang++)
 		{
 			Movement curr = new Movement(src, ang);
@@ -186,7 +187,7 @@ public class Board
 			return false;
 		}
 		int id = getValue(mov.origin);
-		Vector<Field> chain = getChain(mov.origin, mov.angle);
+		List<Field> chain = getChain(mov.origin, mov.angle);
 		for (int i = chain.size() - 1; i >= 0; i--)
 		{
 			Movement curr = new Movement(chain.get(i), mov.angle, mov.distance);
@@ -198,34 +199,62 @@ public class Board
 	
 	/**
 	 * Generuje wszystkie wykonywalne ruchy dla danego u¿ytkownika.
+	 * Wersja ta nie odwo³uje siê do zadnej innej zewnêtrznej funkcji.
+	 * @param id
+	 * Identyfikator u¿ytkownika.
+	 * @return
+	 * Lista mo¿liwych ruchów.
+	 */
+	public List<Transition> generateTransitions(int id) {
+		List<Transition> transitions = new ArrayList<Transition>(250);
+		Movement curr = null;
+		Field src = null;
+		for(int row=0;row<size;row++) {
+			for(int column=0;column<size;column++) {
+				if(tab[row][column] == id) {
+					src = new Field(row, column);
+					for (int ang = 0; ang < 8; ang++) {
+						curr = new Movement(src, ang);
+						while (isExecutable(curr)) {
+							transitions.add(new Transition(this, curr));
+							curr = curr.next();
+						}
+					}
+				}
+			}
+		}
+		Collections.shuffle(transitions);
+		return transitions;
+	}
+	
+	/**
+	 * Generuje wszystkie wykonywalne ruchy dla danego u¿ytkownika.
 	 * @param id
 	 * Identyfikator u¿ytkownika.
 	 * @return
 	 * Vector mo¿liwych ruchów.
 	 */
-	public Vector<Transition> generateTransitions(int id)
+	@Deprecated
+	public List<Transition> generateTransitionsOld(int id)
 	{
-		Vector<Transition> result=new Vector<Transition>();
-		Random rand=new Random();
+		List<Transition> result=new ArrayList<Transition>(200);
+		List<Movement> movs;
+		
 		for(int row=0;row<size;row++)
 		{
 			for(int column=0;column<size;column++)
 			{
 				if(tab[row][column]==id)
 				{
-					Vector<Movement> movs=possibleMoves(new Field(row,column));
-					if(movs.size()>0)
-					{
-						result.add(new Transition(this, movs.get(0)));
-					}
-					for(int i=1;i<movs.size();i++)
-					{
-						result.add(rand.nextInt(result.size()),
-								new Transition(this, movs.get(i)));
+					movs = possibleMoves(new Field(row,column));
+					for (Movement m : movs) {
+						result.add(new Transition(this, m));
 					}
 				}
+				
 			}
 		}
+		Collections.shuffle(result);
 		return result;
 	}
 }

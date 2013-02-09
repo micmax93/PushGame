@@ -2,6 +2,7 @@ package ai.push.logic.oracle;
 
 import ai.push.logic.Board;
 import ai.push.logic.Field;
+import ai.push.logic.Transition;
 
 /**
  * Distance-based egoistic Oracle.
@@ -52,5 +53,10 @@ public class DistancesEgoisticOracle extends Oracle {
 			}
 		}
 		return markPlayer;
+	}
+
+	@Override
+	public int getProphecy(Transition transition, PLAYER player) {
+		return getProphecy(transition.out, player);
 	}
 }

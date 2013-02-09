@@ -2,6 +2,7 @@ package ai.push.logic.oracle;
 
 import ai.push.logic.Board;
 import ai.push.logic.Field;
+import ai.push.logic.Transition;
 
 /**
  * Distance-based Oracle.
@@ -49,5 +50,10 @@ public class DistancesOracle extends Oracle {
 			return markPlayer1 - markPlayer2;
 		else
 			return markPlayer2 - markPlayer1;
+	}
+
+	@Override
+	public int getProphecy(Transition transition, PLAYER player) {
+		return getProphecy(transition.out, player);
 	}
 }

@@ -1,6 +1,6 @@
 package ai.push.logic;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Zawiera wszelkie mo¿liwe informacje o ruchu.
@@ -15,13 +15,14 @@ public class Transition
 	 */
 	public Movement mainMove;
 	
-	/**
+	/*
 	 * Ruchy powsta³e przez przepchniêcie pionków przez g³ówny ruch.
 	 * Pierwszy element - ruch g³ówny.
 	 * Ostatni element - ruch ostatniego pionka w szeregu.
 	 * allMoves.size() - liczba przesuniêtych pionków.
-	 */
+	 
 	public Vector<Movement> allMoves;
+	*/
 	
 	/**
 	 * Stan planszy przed wykonaniem ruchu.
@@ -51,13 +52,27 @@ public class Transition
 		out.execute(mov);
 		
 		mainMove=mov;
-		allMoves=new Vector<Movement>();
+		/*allMoves=new Vector<Movement>();
 		
 		Vector<Field> chain = in.getChain(mov.origin, mov.angle);
 		for (int i = 0; i < chain.size(); i++)
 		{
 			allMoves.add(new Movement(chain.get(i), mov.angle, mov.distance));
+		}*/
+	}
+	
+	public Transition(Transition transition) {
+		this.in = new Board(transition.in);
+		this.out = new Board(transition.in);
+		Movement mov = new Movement(transition.mainMove);
+		out.execute(mov);
+		/*allMoves = new Vector<Movement>();
+
+		Vector<Field> chain = in.getChain(mov.origin, mov.angle);
+		for (int i = 0; i < chain.size(); i++) {
+			allMoves.add(new Movement(chain.get(i), mov.angle, mov.distance));
 		}
+		*/
 	}
 	
 	/**
@@ -68,7 +83,7 @@ public class Transition
 	 * @return
 	 * Vector tranzycji opisuj¹cych mo¿liwe ruchy.
 	 */
-	public Vector<Transition> getNextGeneration(int id)
+	public List<Transition> getNextGeneration(int id)
 	{
 		return out.generateTransitions(id);
 	}

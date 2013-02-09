@@ -1,10 +1,11 @@
 package ai.push.logic;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import ai.push.logic.ai.AbstractAI;
 import ai.push.logic.ai.AlphaBetaAI;
-import ai.push.logic.ai.GreedyAI;
 import ai.push.logic.oracle.Oracle;
 
 public class Logic {
@@ -63,13 +64,17 @@ public class Logic {
 			if ((turn == 1) && (Settings.AI1)) {
 //				ai1 = new RandomAI(this, Oracle.PLAYER.PLAYER1);
 //				ai1 = new GreedyAI(this, Oracle.PLAYER.PLAYER1);
+//				ai1 = new RankGreedyAI(this, Oracle.PLAYER.PLAYER1);
 				ai1 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER1);
+				System.out.println("P1 @ " + new Date());
 				ai1.start();
 			}
 			if ((turn == 2) && (Settings.AI2)) {
 //				ai2 = new RandomAI(this, Oracle.PLAYER.PLAYER2);
-				ai2 = new GreedyAI(this, Oracle.PLAYER.PLAYER2);
-//				ai2 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER2);
+//				ai2 = new GreedyAI(this, Oracle.PLAYER.PLAYER2);
+//				ai2 = new RankGreedyAI(this, Oracle.PLAYER.PLAYER2);
+				ai2 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER2);
+				System.out.println("P2 @ " + new Date());
 				ai2.start();
 			} else {
 				locked = false;
@@ -80,7 +85,7 @@ public class Logic {
 	/**
 	 * Zwraca identyfikator przeciwnika.
 	 */
-	int enemyID() {
+	public int enemyID() {
 		if (turn == 1) {
 			return 2;
 		} else {
@@ -93,7 +98,7 @@ public class Logic {
 	 * 
 	 * @return Identyfikator zwyciêzcy, je¿eli brak to 0.
 	 */
-	int hasFinished() {
+	public int hasFinished() {
 		boolean won1 = true, won2 = true;
 		for (int row = 0; row < size; row++) {
 			int beg = Settings.rowCount;
@@ -131,11 +136,11 @@ public class Logic {
 	 * 
 	 * @param origin
 	 *            Pole Ÿród³³owe.
-	 * @return Vector mo¿liwych pól docelowych.
+	 * @return Lista mo¿liwych pól docelowych.
 	 */
-	public Vector<Field> possibleDestinations(Field origin) {
-		Vector<Movement> movs = board.possibleMoves(origin);
-		Vector<Field> destinations = new Vector<Field>();
+	public List<Field> possibleDestinations(Field origin) {
+		List<Movement> movs = board.possibleMoves(origin);
+		List<Field> destinations = new ArrayList<Field>();
 		for (int i = 0; i < movs.size(); i++) {
 			destinations.add(movs.get(i).destination);
 		}
@@ -158,9 +163,9 @@ public class Logic {
 	/**
 	 * Generuje wszystkie wykonywalne ruchy dla aktualnie graj¹cego gracza.
 	 * 
-	 * @return Vector tranzycji przedstawiaj¹cy wszystkie wykonywalny ruchy.
+	 * @return Lista tranzycji przedstawiaj¹cy wszystkie wykonywalny ruchy.
 	 */
-	public Vector<Transition> generateTransitions() {
+	public List<Transition> generateTransitions() {
 		return board.generateTransitions(turn);
 	}
 }

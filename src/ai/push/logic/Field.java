@@ -18,6 +18,15 @@ public class Field
 		this.row = row;
 		this.column = column;
 	}
+	
+	/**
+	 * Konstruktor kopiuj¹cy
+	 * @param field
+	 */
+	public Field(Field field) {
+		this.row = field.row;
+		this.column = field.row;
+	}
 
 	/**
 	 * Sprawdza czy wspó³rzêdne s¹ poprawne, czyli czy znajduj¹ siê na szachownicy.

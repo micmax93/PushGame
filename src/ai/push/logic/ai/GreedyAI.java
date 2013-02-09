@@ -3,7 +3,6 @@ package ai.push.logic.ai;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import ai.push.logic.Logic;
 import ai.push.logic.Transition;
@@ -22,6 +21,7 @@ public class GreedyAI extends AbstractAI {
 	public GreedyAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
 		oracle = new DistancesEgoisticOracle(1, 2);
+//		oracle = new RankOracle(1, 2);
 	}
 
 	@Override
@@ -32,10 +32,12 @@ public class GreedyAI extends AbstractAI {
 		System.out.println("G " + new Date());
 		
 		List<Transition> listSorted = list;
+			
 		Collections.sort(listSorted, new TransitionComparator(oracle, player, ORDER.DESC));
 		Transition decision = listSorted.get(0);
+		
 		boolean found = false;
-		Vector<Transition> next;
+		List<Transition> next;
 
 		int opponentId = 0;
 		Oracle.PLAYER opponent;

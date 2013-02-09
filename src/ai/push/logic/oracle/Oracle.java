@@ -1,6 +1,7 @@
 package ai.push.logic.oracle;
 
 import ai.push.logic.Board;
+import ai.push.logic.Transition;
 
 /**
  * Interface for Oracles.
@@ -20,13 +21,21 @@ public abstract class Oracle {
 
 	public abstract int getProphecy(Board board, PLAYER player);
 	
+	public abstract int getProphecy(Transition transition, PLAYER player);
+	
 	public int getProphecy(Board board, int player) {
-		if (player == 1)
+		if (player == player1)
 			return getProphecy(board, Oracle.PLAYER.PLAYER1);
 		else
 			return getProphecy(board, Oracle.PLAYER.PLAYER2);
 	}
-
+	
+	public int getProphecy(Transition transition, int player) {
+		if (player == player1)
+			return getProphecy(transition, Oracle.PLAYER.PLAYER1);
+		else
+			return getProphecy(transition, Oracle.PLAYER.PLAYER2);
+	}
 	public int getPlayer1Symbol() {
 		return player1;
 	}

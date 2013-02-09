@@ -4,13 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
-import java.util.Vector;
+import java.util.List;
 
 import ai.push.logic.Field;
 import ai.push.logic.Logic;
 import ai.push.logic.Movement;
 import ai.push.logic.Settings;
-
 
 public class Checker
 {
@@ -148,8 +147,7 @@ public class Checker
 		{
 			special[row][column] = 1;
 			selected = new Field(row, column);
-			Vector<Field> dest; 
-			dest = game.possibleDestinations(new Field(row,column));
+			List<Field> dest = game.possibleDestinations(new Field(row,column));
 			for (int i = 0; i < dest.size(); i++)
 			{
 				special[dest.get(i).row][dest.get(i).column] = 2;

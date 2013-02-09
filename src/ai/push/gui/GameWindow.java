@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -172,7 +172,7 @@ public class GameWindow extends JFrame implements MouseListener, ActionListener,
 		
 	}
 	
-	Vector<Transition> list;
+	List<Transition> list;
 	public void actionPerformed(ActionEvent e)
 	{
 		Object src = e.getSource();

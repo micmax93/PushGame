@@ -14,6 +14,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import ai.push.logic.Settings;
+import ai.push.logic.ai.AIFactory;
 
 
 @SuppressWarnings("serial")
@@ -32,7 +33,7 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 	public PlayerWindow()
 	{
 		super("Pionek");
-		setBounds(100, 100, 500, 380);
+		setBounds(100, 100, 620, 380);
 		setBackground(Color.GRAY);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -41,13 +42,13 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 
 		rb1.setBounds(10, 5, 112, 30);
 		rb1.setSelected(true);
-		rb2.setBounds(250, 5, 90, 30);
+		rb2.setBounds(260, 5, 90, 30);
 		bg.add(rb1);
 		bg.add(rb2);
 		add(rb1);
 		add(rb2);
 
-		cc1.setBounds(0, 40, 500, 400);
+		cc1.setBounds(0, 40, 620, 400);
 		add(cc1);
 		setLayout(null);
 		rb1.addActionListener(this);
@@ -62,27 +63,27 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 		add(prev1);
 
 		cb1.addItem("Gracz");
-		cb1.addItem("AI");
-		cb1.setBounds(154, 10, 60, 20);
+		AIFactory.addAlgos(cb1);
+		cb1.setBounds(154, 10, 100, 20);
 		if (Settings.AI1)
 		{
-			cb1.setSelectedIndex(1);
+			cb1.setSelectedItem(AIFactory.algoAI1);
 		}
 		cb1.addActionListener(this);
 		add(cb1);
 
-		prev2.setBounds(341, 10, 30, 20);
+		prev2.setBounds(351, 10, 30, 20);
 		prev2.setVisible(true);
 		prev2.setBackground(Settings.C2);
 		prev2.setEnabled(false);
 		add(prev2);
 
 		cb2.addItem("Gracz");
-		cb2.addItem("AI");
-		cb2.setBounds(372, 10, 60, 20);
+		AIFactory.addAlgos(cb2);
+		cb2.setBounds(382, 10, 100, 20);
 		if (Settings.AI2)
 		{
-			cb2.setSelectedIndex(1);
+			cb2.setSelectedItem(AIFactory.algoAI2);
 		}
 		cb2.addActionListener(this);
 		add(cb2);
@@ -118,10 +119,12 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 		if (src == cb1)
 		{
 			Settings.AI1 = (cb1.getSelectedIndex() > 0);
+			AIFactory.setAlgo(1, cb1);
 		}
 		if (src == cb2)
 		{
 			Settings.AI2 = (cb2.getSelectedIndex() > 0);
+			AIFactory.setAlgo(2, cb2);
 		}
 	}
 }

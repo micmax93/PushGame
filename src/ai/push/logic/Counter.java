@@ -91,6 +91,14 @@ public class Counter extends Thread
 	{
 		count = 0;
 	}
+	
+	/**
+	 * Wznowienie licznika
+	 */
+	public void unpause()
+	{
+		count = 1;
+	}
 
 	/**
 	 * Utworzenie licznika dla danego okna gry.

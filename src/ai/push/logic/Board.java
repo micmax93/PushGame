@@ -1,13 +1,16 @@
 package ai.push.logic;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.io.Serializable;
 
-public class Board
+public class Board implements Serializable
 {
+	private static final long serialVersionUID = 888670286751254258L;
 	public int tab[][];
-	final int size;
+	final int size,rowcount;
 
 	/**
 	 * Zwraca wartoœæ pola na szachownicy.
@@ -47,6 +50,7 @@ public class Board
 	public Board()
 	{
 		size = Settings.size;
+		rowcount=Settings.rowCount;
 		tab = new int[size][size];
 		for (int w = 0; w < size; w++)
 		{
@@ -78,6 +82,7 @@ public class Board
 	public Board(Board copy)
 	{
 		size=copy.size;
+		rowcount=copy.rowcount;
 		tab=new int[size][size];
 		for(int row=0;row<size;row++)
 		{

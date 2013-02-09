@@ -8,9 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Vector;
 
+import ai.push.logic.ai.AIFactory;
 import ai.push.logic.ai.AbstractAI;
-import ai.push.logic.ai.AlphaBetaAI;
-import ai.push.logic.ai.GreedyAI;
 import ai.push.logic.oracle.Oracle;
 
 public class Logic {
@@ -74,13 +73,17 @@ public class Logic {
 			if ((turn == 1) && (Settings.AI1)) {
 //				ai1 = new RandomAI(this, Oracle.PLAYER.PLAYER1);
 //				ai1 = new GreedyAI(this, Oracle.PLAYER.PLAYER1);
-				ai1 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER1);
+				//ai1 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER1);
+				ai1 = AIFactory.getAI(this, Oracle.PLAYER.PLAYER1);
+				System.out.println(ai1.getClass().getName());
 				ai1.start();
 			}
 			else if ((turn == 2) && (Settings.AI2)) {
 //				ai2 = new RandomAI(this, Oracle.PLAYER.PLAYER2);
-				ai2 = new GreedyAI(this, Oracle.PLAYER.PLAYER2);
+				//ai2 = new GreedyAI(this, Oracle.PLAYER.PLAYER2);
+				ai2 = AIFactory.getAI(this, Oracle.PLAYER.PLAYER2);
 //				ai2 = new AlphaBetaAI(this, Oracle.PLAYER.PLAYER2);
+				System.out.println(ai2.getClass().getName());
 				ai2.start();
 			} else {
 				locked = false;

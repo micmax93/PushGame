@@ -11,14 +11,56 @@ public class AIFactory
 	static final public String ALPHA_BETA_AI="AI alfa-beta";
 	static final public String RANDOM_AI="AI losowy";
 	
-	static public String algoAI1=ALPHA_BETA_AI;
-	static public String algoAI2=GREEDY_AI;
+	static public String algoAI1=GREEDY_AI;
+	static public Integer depthAI1=2;
+	static public String algoAI2=ALPHA_BETA_AI;
+	static public Integer depthAI2=4;
+	
 	
 	static public void addAlgos(JComboBox<String> cb)
 	{
 		cb.addItem(RANDOM_AI);
 		cb.addItem(GREEDY_AI);
 		cb.addItem(ALPHA_BETA_AI);
+	}
+	
+	static public void loadDepths(int aiID,String algo,JComboBox<Integer> cb)
+	{
+		if(algo==ALPHA_BETA_AI)
+		{
+			cb.removeAllItems();
+			cb.addItem(2);
+			cb.addItem(4);
+			cb.addItem(6);
+			if(aiID==1)
+			{
+				cb.setSelectedItem(depthAI1);
+			}
+			else if(aiID==2)
+			{
+				cb.setSelectedItem(depthAI2);
+			}
+			
+		}
+		else
+		{
+			cb.removeAllItems();
+		}
+	}
+	
+	static public void setDepth(int aiID,JComboBox<Integer> cb)
+	{
+		if(cb.getItemCount()>0)
+		{
+			if(aiID==1)
+			{
+				depthAI1=(Integer) cb.getSelectedItem();
+			}
+			else if(aiID==2)
+			{
+				depthAI2=(Integer) cb.getSelectedItem();
+			}
+		}
 	}
 	
 	static public void setAlgo(int aiID,JComboBox<String> cb)
@@ -36,28 +78,32 @@ public class AIFactory
 	static public AbstractAI getAI(Logic logic, Oracle.PLAYER player)
 	{
 		String ai="";
+		Integer md=0;
 		if(player==Oracle.PLAYER.PLAYER1)
 		{
 			ai=algoAI1;
+			md=depthAI1;
 		}
 		else if(player==Oracle.PLAYER.PLAYER2)
 		{
 			ai=algoAI2;
+			md=depthAI2;
 		}
 		
-		
+		AbstractAI result=null;
 		if(ai==RANDOM_AI)
 		{
-			return new RandomAI(logic, player);
+			result=new RandomAI(logic, player);
 		}
 		else if(ai==GREEDY_AI)
 		{
-			return new GreedyAI(logic, player);
+			result=new GreedyAI(logic, player);
 		}
 		else if(ai==ALPHA_BETA_AI)
 		{
-			return new AlphaBetaAI(logic, player);
+			result=new AlphaBetaAI(logic, player);
+			result.setMaxDepth(md);
 		}
-		return null;
+		return result;
 	}
 }

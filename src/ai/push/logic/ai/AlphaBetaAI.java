@@ -51,7 +51,7 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 
 	@Override
 	protected void algorithm() {
-		maxDepth = 4; // g³êbokoœæ przeszukiwania
+		//maxDepth = 4; // g³êbokoœæ przeszukiwania
 		Transition decision = null;
 
 		int plr;

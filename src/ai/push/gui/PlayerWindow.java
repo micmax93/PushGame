@@ -30,6 +30,9 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 	JComboBox<String> cb1 = new JComboBox<String>();
 	JComboBox<String> cb2 = new JComboBox<String>();
 
+	JComboBox<Integer> md1 = new JComboBox<Integer>();
+	JComboBox<Integer> md2 = new JComboBox<Integer>();
+
 	public PlayerWindow()
 	{
 		super("Pionek");
@@ -42,7 +45,7 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 
 		rb1.setBounds(10, 5, 112, 30);
 		rb1.setSelected(true);
-		rb2.setBounds(260, 5, 90, 30);
+		rb2.setBounds(300, 5, 90, 30);
 		bg.add(rb1);
 		bg.add(rb2);
 		add(rb1);
@@ -71,8 +74,14 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 		}
 		cb1.addActionListener(this);
 		add(cb1);
+		
+		md1.setBounds(254, 10, 35, 20);
+		AIFactory.loadDepths(1,(String) cb1.getSelectedItem(), md1);
+		md1.setVisible(md1.getItemCount()>0);
+		md1.addActionListener(this);
+		add(md1);
 
-		prev2.setBounds(351, 10, 30, 20);
+		prev2.setBounds(391, 10, 30, 20);
 		prev2.setVisible(true);
 		prev2.setBackground(Settings.C2);
 		prev2.setEnabled(false);
@@ -80,13 +89,19 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 
 		cb2.addItem("Gracz");
 		AIFactory.addAlgos(cb2);
-		cb2.setBounds(382, 10, 100, 20);
+		cb2.setBounds(422, 10, 100, 20);
 		if (Settings.AI2)
 		{
 			cb2.setSelectedItem(AIFactory.algoAI2);
 		}
 		cb2.addActionListener(this);
 		add(cb2);
+		
+		md2.setBounds(522, 10, 35, 20);
+		AIFactory.loadDepths(2,(String) cb2.getSelectedItem(), md2);
+		md2.setVisible(md2.getItemCount()>0);
+		md2.addActionListener(this);
+		add(md2);
 
 	}
 
@@ -120,11 +135,23 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 		{
 			Settings.AI1 = (cb1.getSelectedIndex() > 0);
 			AIFactory.setAlgo(1, cb1);
+			AIFactory.loadDepths(1,(String) cb1.getSelectedItem(), md1);
+			md1.setVisible(md1.getItemCount()>0);
 		}
 		if (src == cb2)
 		{
 			Settings.AI2 = (cb2.getSelectedIndex() > 0);
 			AIFactory.setAlgo(2, cb2);
+			AIFactory.loadDepths(2,(String) cb2.getSelectedItem(), md2);
+			md2.setVisible(md2.getItemCount()>0);
+		}
+		if (src == md1)
+		{
+			AIFactory.setDepth(1, md1);
+		}
+		if (src == md2)
+		{
+			AIFactory.setDepth(2, md2);
 		}
 	}
 }

@@ -9,6 +9,7 @@ import ai.push.logic.Logic;
 import ai.push.logic.Settings;
 import ai.push.logic.Transition;
 import ai.push.logic.ai.tt.Transposition;
+import ai.push.logic.ai.tt.TranspositionHashStorage;
 import ai.push.logic.ai.tt.TranspositionTable;
 import ai.push.logic.oracle.DelphiOracle;
 import ai.push.logic.oracle.Oracle;
@@ -18,8 +19,7 @@ public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 
 	private int[] threadReturn;
 	private FSAlphaBetaTTThread[] threads;
-	private boolean forceOneThread = true;
-	//private TranspositionTable magicTable;
+	private boolean forceOneThread = false;
 
 	public FSAlphaBetaTTAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
@@ -59,7 +59,8 @@ public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 	protected void algorithm() {
 		// maxDepth = 4; // g³êbokoœæ przeszukiwania
 		Transition decision = null;
-		TranspositionTable magicTable = new TranspositionTable();
+		TranspositionHashStorage magicTable = new TranspositionTable();
+		System.out.println("CHAR = " + Character.SIZE);
 
 		int plr;
 		if (player == Oracle.PLAYER.PLAYER1)
@@ -175,13 +176,13 @@ class FSAlphaBetaTTThread extends Thread {
 	private int alpha;
 	private int beta;
 	private int player;
-	private TranspositionTable magicTable;
+	private TranspositionHashStorage magicTable;
 
 	public FSAlphaBetaTTThread() {
 	}
 
 	public FSAlphaBetaTTThread(int threadId, ThreadEndEvent event, Oracle oracle,
-			Transition transition, int depth, int alpha, int beta, int player, TranspositionTable magicTable) {
+			Transition transition, int depth, int alpha, int beta, int player, TranspositionHashStorage magicTable) {
 		super();
 		this.threadId = threadId;
 		this.event = event;
@@ -200,7 +201,9 @@ class FSAlphaBetaTTThread extends Thread {
 			return oracle.getProphecy(transition, player);
 		}
 		
-		//System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
+		System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
+		
+		int prevAlpha = alpha;
 		
 		Transposition t = magicTable.get(transition.out); // TODO
 		if (t != null) { // jeœli znaleziono coœ w tablicy transpozycji
@@ -244,7 +247,7 @@ class FSAlphaBetaTTThread extends Thread {
 		moves.clear();
 		
 		if (nextBest != null) { //  && depth > 1
-			magicTable.put(transition.out, new Transposition(best, depth, alpha, beta, nextBest));
+			magicTable.put(transition.out, new Transposition(best, depth, prevAlpha, beta, nextBest));
 		}
 
 		return best;

@@ -30,8 +30,10 @@ public class DelphiOracle extends Oracle {
 		} else {
 			plr = player2;
 		}
+		//int plr2 = 3 - plr;
 		// int rank = 0;
 		int prophecy = 0;
+		//int enemy = 0;
 		// double improvement = 0.0f;
 		int size = transition.out.getWidth();
 
@@ -45,6 +47,15 @@ public class DelphiOracle extends Oracle {
 						prophecy += DISTANCES_RANKS[size - 1 - r];
 					}
 				}
+				/* else if (transition.out.tab[r][c] == plr2) {
+					if (plr2 == player1) { // player at the top of the board
+						enemy += DISTANCES_RANKS[r];
+						// value=r+1)
+					} else {
+						enemy += DISTANCES_RANKS[size - 1 - r];
+					}
+				}
+				*/
 			}
 		}
 		return prophecy; //prophecy;

@@ -1,5 +1,6 @@
 package ai.push.logic.ai;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,24 +8,28 @@ import ai.push.logic.Board;
 import ai.push.logic.Logic;
 import ai.push.logic.Settings;
 import ai.push.logic.Transition;
+import ai.push.logic.ai.tt.Transposition;
+import ai.push.logic.ai.tt.TranspositionTable;
 import ai.push.logic.oracle.DelphiOracle;
 import ai.push.logic.oracle.Oracle;
 import ai.push.logic.oracle.TransitionComparator;
 
-public class FSAlphaBetaAI extends AbstractAI implements ThreadEndEvent {
+public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 
 	private int[] threadReturn;
-	private FSAlphaBetaThread[] threads;
-	private boolean forceOneThread = false;
+	private FSAlphaBetaTTThread[] threads;
+	private boolean forceOneThread = true;
+	//private TranspositionTable magicTable;
 
-	public FSAlphaBetaAI(Logic logic, Oracle.PLAYER player) {
+	public FSAlphaBetaTTAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
 		// oracle = new RankOracle(1, 2);
 		// oracle = new LogarithmicOracle(1, 2);
 		oracle = new DelphiOracle(1, 2);
 		// oracle = new ExponentialOracle(1, 2); // tu ustawiasz wyroczniê
 		threadReturn = new int[2];
-		threads = new FSAlphaBetaThread[2];
+		threads = new FSAlphaBetaTTThread[2];
+		//magicTable = new TranspositionTable();
 	}
 
 	public static boolean isGameOver(Board board) {
@@ -54,6 +59,7 @@ public class FSAlphaBetaAI extends AbstractAI implements ThreadEndEvent {
 	protected void algorithm() {
 		// maxDepth = 4; // g³êbokoœæ przeszukiwania
 		Transition decision = null;
+		TranspositionTable magicTable = new TranspositionTable();
 
 		int plr;
 		if (player == Oracle.PLAYER.PLAYER1)
@@ -90,14 +96,14 @@ public class FSAlphaBetaAI extends AbstractAI implements ThreadEndEvent {
 			if (debug)
 				System.out.println("->" + i);
 
-			threads[0] = new FSAlphaBetaThread(0, this, new DelphiOracle(1, 2),
+			threads[0] = new FSAlphaBetaTTThread(0, this, new DelphiOracle(1, 2),
 					new Transition(list.get(i)), maxDepth - 1, -beta, -alpha,
-					3 - plr);
+					3 - plr, magicTable);
 			threads[0].run();
 			if (!forceOneThread && (i + 1 < list.size())) {
-				threads[1] = new FSAlphaBetaThread(1, this, new DelphiOracle(1,
+				threads[1] = new FSAlphaBetaTTThread(1, this, new DelphiOracle(1,
 						2), new Transition(list.get(i + 1)), maxDepth - 1,
-						-beta, -alpha, 3 - plr);
+						-beta, -alpha, 3 - plr, magicTable);
 				threads[1].run();
 			}
 			try {
@@ -135,6 +141,8 @@ public class FSAlphaBetaAI extends AbstractAI implements ThreadEndEvent {
 					decision = list.get(i + 1);
 				}
 			}
+			
+			//System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
 		}
 
 		if (debug)
@@ -148,6 +156,8 @@ public class FSAlphaBetaAI extends AbstractAI implements ThreadEndEvent {
 		result = decision.mainMove;
 		if (debug)
 			System.out.println("RESULT = " + result.destination.row);
+		
+		//System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
 	}
 
 	@Override
@@ -156,7 +166,7 @@ public class FSAlphaBetaAI extends AbstractAI implements ThreadEndEvent {
 	}
 }
 
-class FSAlphaBetaThread extends Thread {
+class FSAlphaBetaTTThread extends Thread {
 	private int threadId;
 	private Transition transition;
 	private ThreadEndEvent event;
@@ -165,12 +175,13 @@ class FSAlphaBetaThread extends Thread {
 	private int alpha;
 	private int beta;
 	private int player;
+	private TranspositionTable magicTable;
 
-	public FSAlphaBetaThread() {
+	public FSAlphaBetaTTThread() {
 	}
 
-	public FSAlphaBetaThread(int threadId, ThreadEndEvent event, Oracle oracle,
-			Transition transition, int depth, int alpha, int beta, int player) {
+	public FSAlphaBetaTTThread(int threadId, ThreadEndEvent event, Oracle oracle,
+			Transition transition, int depth, int alpha, int beta, int player, TranspositionTable magicTable) {
 		super();
 		this.threadId = threadId;
 		this.event = event;
@@ -180,26 +191,49 @@ class FSAlphaBetaThread extends Thread {
 		this.alpha = alpha;
 		this.beta = beta;
 		this.player = player;
+		this.magicTable = magicTable;
 	}
 
 	public int alphaBeta(Transition transition, int depth, int alpha, int beta,
 			int player) {
-		if ((depth == 0) || FSAlphaBetaAI.isGameOver(transition.in)) {
-			// System.out.println("TERMINATE PLAYER# " + player + " WITH: " +
-			// oracle.getProphecy(transition, player));
-			// System.out.println(new Date() + " END");
-			//System.out.println("P: " + oracle.getProphecy(transition, player));
-			return oracle.getProphecy(transition, player); // player
+		if ((depth == 0) || FSAlphaBetaTTAI.isGameOver(transition.in)) {
+			return oracle.getProphecy(transition, player);
 		}
-		List<Transition> moves = transition.getNextGeneration(player);
-
+		
+		//System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
+		
+		Transposition t = magicTable.get(transition.out); // TODO
+		if (t != null) { // jeœli znaleziono coœ w tablicy transpozycji
+			if (t.getDepth() >= depth) { // i wynik mo¿e mieæ znaczenie na tym poziomie
+				if (t.getType() == Transposition.VALUE_TYPE.LOWER)
+					alpha = Math.max(alpha, t.getValue());
+				else if (t.getType() == Transposition.VALUE_TYPE.UPPER)
+					beta = Math.min(beta, t.getValue());
+				else {
+					alpha = t.getValue();
+					beta = t.getValue();
+				}
+			}
+			if (alpha >= beta) // odciêcie
+				return t.getValue();
+		}
+		
+		List<Transition> moves = new ArrayList<Transition>();
+		if (t != null && t.getNext() != null) {
+			moves.add(t.getNext());
+		}
+		moves.addAll(transition.getNextGeneration(player));
+		
 		int best = Integer.MIN_VALUE;
+		Transition nextBest = null;
 
 		int value;
 		for (Transition m : moves) {
 			value = -alphaBeta(m, depth - 1, -beta, -alpha, 3 - player);
-			if (value > best)
+			if (value > best) {
 				best = value;
+				nextBest = m;
+			}
 			if (best >= beta) {
 				// System.out.println("ODCIÊCIE! @ LVL: " + depth);
 				break;
@@ -208,6 +242,10 @@ class FSAlphaBetaThread extends Thread {
 				alpha = best;
 		}
 		moves.clear();
+		
+		if (nextBest != null) { //  && depth > 1
+			magicTable.put(transition.out, new Transposition(best, depth, alpha, beta, nextBest));
+		}
 
 		return best;
 	}

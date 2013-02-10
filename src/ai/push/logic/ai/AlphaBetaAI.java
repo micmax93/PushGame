@@ -63,8 +63,12 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 
 		int decisionVal = Integer.MIN_VALUE;
 
-		int alpha = Integer.MIN_VALUE + 1;
+		//int alpha = Integer.MIN_VALUE + 1;
+		//int beta = Integer.MAX_VALUE - 1;
+		
+		int alpha = Integer.MIN_VALUE + 2;
 		int beta = Integer.MAX_VALUE - 1;
+		
 		
 		//System.out.println(new Date() + " BEG");
 		

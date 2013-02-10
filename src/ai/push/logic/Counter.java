@@ -1,5 +1,7 @@
 package ai.push.logic;
 
+import java.util.Date;
+
 import ai.push.gui.GameWindow;
 
 /**
@@ -9,6 +11,7 @@ import ai.push.gui.GameWindow;
 public class Counter extends Thread
 {
 	int time[] = new int[3];
+	long ltime[] = new long[3];
 	int turn = 1;
 	int count = 0;
 	boolean active;
@@ -48,6 +51,21 @@ public class Counter extends Thread
 	synchronized public void setTurn(int i)
 	{
 		turn = i;
+		commitTime();
+	}
+	
+	long last=0,curr=0;
+	synchronized void commitTime()
+	{
+		if(curr==0) {return;} 
+		last=curr;
+		curr=new Date().getTime();
+		ltime[turn] += count*(curr-last);
+		time[turn] = (int)(ltime[turn]/1000);
+		home.time1.setValue(1);
+		home.time2.setValue(1);
+		home.timer[1].setText(getTimeString(1));
+		home.timer[3].setText(getTimeString(2));
 	}
 
 	/**
@@ -57,18 +75,15 @@ public class Counter extends Thread
 	{
 		while (active)
 		{
+			curr=new Date().getTime();
 			try
 			{
-				sleep(1000);
+				sleep(300);
 			}
 			catch (InterruptedException e)
 			{
 			}
-			time[turn] += count;
-			home.time1.setValue(getTime(1));
-			home.time2.setValue(getTime(2));
-			home.timer[1].setText(getTimeString(1));
-			home.timer[3].setText(getTimeString(2));
+			commitTime();
 		}
 	}
 	

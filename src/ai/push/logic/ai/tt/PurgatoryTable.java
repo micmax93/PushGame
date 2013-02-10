@@ -5,11 +5,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import ai.push.logic.Board;
 
-public class TranspositionTable implements TranspositionHashStorage {
+public class PurgatoryTable implements TranspositionHashStorage {
 	private Map<String, Transposition> transpositions;
+	private Map<String, TranspositionSoul> purgatory;
+	private final int stPeterKey = 10;
 	
-	public TranspositionTable() {
-		this.transpositions = new ConcurrentHashMap<String, Transposition>();
+	
+	public PurgatoryTable() {
+		this.transpositions = new ConcurrentHashMap<String, Transposition>(100000);
+		this.purgatory = new ConcurrentHashMap<String, TranspositionSoul> (100000);
 	}
 	
 	private String hash(Board b) {
@@ -68,4 +72,26 @@ public class TranspositionTable implements TranspositionHashStorage {
 		transpositions.clear();		
 	}
 	
+}
+
+class TranspositionSoul {
+	private Transposition transposition;
+	private int stats;
+	
+	public TranspositionSoul(Transposition t) {
+		transposition = t;
+		stats = 0;
+	}
+	
+	public void incrementStats() {
+		++stats;
+	}
+	
+	public Transposition getTransposition() {
+		return transposition;
+	}
+	
+	public int getStats() {
+		return stats;
+	}
 }

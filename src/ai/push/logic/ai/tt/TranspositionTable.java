@@ -9,7 +9,7 @@ public class TranspositionTable implements TranspositionHashStorage {
 	private Map<String, Transposition> transpositions;
 	
 	public TranspositionTable() {
-		this.transpositions = new ConcurrentHashMap<String, Transposition>();
+		this.transpositions = new ConcurrentHashMap<String, Transposition>(50000000, 1.0f);
 	}
 	
 	private String hash(Board b) {

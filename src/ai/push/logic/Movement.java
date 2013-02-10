@@ -7,7 +7,7 @@ package ai.push.logic;
 public class Movement
 {
 	public Field origin, destination;
-	public int distance;
+	public byte distance;
 	/**
 	 * K¹t który jest zdefiniowany jako liczba ca³kowita z przedzia³u <0;7>.
 	 * K¹t jest zdefiniowany zgodnie z ruchem wskazówek zegara od 0.
@@ -26,7 +26,7 @@ public class Movement
 	 * @param dist
 	 * Odleg³oœæ jak¹ przebêdzie ruch.
 	 */
-	public Movement(Field src, int ang, int dist) {
+	public Movement(Field src, int ang, byte dist) {
 		origin = src;
 		distance = dist;
 		angle = ang;
@@ -48,8 +48,8 @@ public class Movement
 		}
 
 		destination = new Field();
-		destination.row = origin.row + distance * vert;
-		destination.column = origin.column + distance * horiz;
+		destination.row = (byte) (origin.row + distance * vert);
+		destination.column = (byte) (origin.column + distance * horiz);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class Movement
 	 * K¹t ruchu.
 	 */
 	public Movement(Field src, int ang) {
-		this(src, ang, 1);
+		this(src, ang, (byte)1);
 	}
 
 	/**
@@ -75,8 +75,8 @@ public class Movement
 		origin = src;
 		destination = dest;
 
-		int vert = destination.row - origin.row;
-		int horiz = destination.column - origin.column;
+		byte vert = (byte) (destination.row - origin.row);
+		byte horiz = (byte) (destination.column - origin.column);
 
 		if (vert == 0) {
 			if (horiz > 0) {
@@ -84,7 +84,7 @@ public class Movement
 				distance = horiz;
 			} else if (horiz < 0) {
 				angle = 6;
-				distance = -horiz;
+				distance = (byte) -horiz;
 			} else {
 				angle = -1;
 				distance = 0;
@@ -95,11 +95,11 @@ public class Movement
 				distance = vert;
 			} else if (vert < 0) {
 				angle = 0;
-				distance = -vert;
+				distance = (byte) -vert;
 			}
 		} else {
 			if (Math.abs(vert) == Math.abs(horiz)) {
-				distance = Math.abs(vert);
+				distance = (byte) Math.abs(vert);
 				if (vert < 0) {
 					if (horiz > 0) {
 						angle = 1;
@@ -147,7 +147,7 @@ public class Movement
 	 * @return
 	 */
 	public Movement next() {
-		Movement nxt = new Movement(origin, angle, distance + 1);
+		Movement nxt = new Movement(origin, angle, (byte) (distance + 1));
 		if (nxt.isValid()) {
 			return nxt;
 		} else {

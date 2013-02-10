@@ -18,9 +18,9 @@ public class DummyLogic extends Logic
 	{
 		Vector<Field> destinations = new Vector<Field>();
 		
-		for (int i = 0; i < board.tab.length; i++)
+		for (byte i = 0; i < board.tab.length; i++)
 		{
-			for (int j = 0; j < board.tab[i].length; j++)
+			for (byte j = 0; j < board.tab[i].length; j++)
 			{
 				if (board.tab[i][j] == 0)
 				{
@@ -35,7 +35,7 @@ public class DummyLogic extends Logic
 	public boolean executeMove(Movement move)
 	{
 		board.setValue(move.destination, board.getValue(move.origin));
-		board.setValue(move.origin, 0);
+		board.setValue(move.origin, (byte)0);
 		return true;
 	}
 	

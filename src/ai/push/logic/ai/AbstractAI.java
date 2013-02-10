@@ -88,6 +88,7 @@ public abstract class AbstractAI extends Thread {
 		}
 		
 		game.executeMove(result);
+		Runtime.getRuntime().gc();
 		game.endTurn();
 	}
 }

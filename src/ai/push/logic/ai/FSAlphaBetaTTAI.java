@@ -94,6 +94,8 @@ public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 		boolean debug = false;
 
 		for (int i = 0; i < list.size(); i += iterStep) {
+			System.out.println("->" + i);
+			
 			if (debug)
 				System.out.println("->" + i);
 
@@ -201,7 +203,7 @@ class FSAlphaBetaTTThread extends Thread {
 			return oracle.getProphecy(transition, player);
 		}
 		
-		System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
+		//System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
 		
 		int prevAlpha = alpha;
 		

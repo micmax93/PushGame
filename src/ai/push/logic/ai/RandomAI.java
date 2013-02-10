@@ -14,6 +14,7 @@ import ai.push.logic.oracle.Oracle;
 public class RandomAI extends AbstractAI {
 	public RandomAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
+		usingDelay=true;
 	}
 
 	@Override

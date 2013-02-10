@@ -20,6 +20,7 @@ public class GreedyAI extends AbstractAI {
 	public GreedyAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
 		oracle = new DistancesEgoisticOracle(1, 2);
+		usingDelay=true;
 	}
 
 	@Override

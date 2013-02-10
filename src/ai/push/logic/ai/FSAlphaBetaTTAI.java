@@ -229,6 +229,14 @@ class FSAlphaBetaTTThread extends Thread {
 		}
 		moves.addAll(transition.getNextGeneration(player));
 		
+		if (player == 1) {
+			Collections.sort(moves, new TransitionComparator(oracle,
+					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
+		} else {
+			Collections.sort(moves, new TransitionComparator(oracle,
+					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
+		}
+		
 		int best = Integer.MIN_VALUE;
 		Transition nextBest = null;
 

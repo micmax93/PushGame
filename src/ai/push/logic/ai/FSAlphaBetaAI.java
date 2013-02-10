@@ -11,18 +11,18 @@ import ai.push.logic.oracle.DelphiOracle;
 import ai.push.logic.oracle.Oracle;
 import ai.push.logic.oracle.TransitionComparator;
 
-public class FSAlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
-	
+public class FSAlphaBetaAI extends AbstractAI implements ThreadEndEvent {
+
 	private int[] threadReturn;
 	private FSAlphaBetaThread[] threads;
 	private boolean forceOneThread = false;
-	
+
 	public FSAlphaBetaAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
-//		oracle = new RankOracle(1, 2);
-//		oracle = new LogarithmicOracle(1, 2);
+		// oracle = new RankOracle(1, 2);
+		// oracle = new LogarithmicOracle(1, 2);
 		oracle = new DelphiOracle(1, 2);
-//		oracle = new ExponentialOracle(1, 2); // tu ustawiasz wyroczniê
+		// oracle = new ExponentialOracle(1, 2); // tu ustawiasz wyroczniê
 		threadReturn = new int[2];
 		threads = new FSAlphaBetaThread[2];
 	}
@@ -52,7 +52,7 @@ public class FSAlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 
 	@Override
 	protected void algorithm() {
-		//maxDepth = 4; // g³êbokoœæ przeszukiwania
+		// maxDepth = 4; // g³êbokoœæ przeszukiwania
 		Transition decision = null;
 
 		int plr;
@@ -65,9 +65,9 @@ public class FSAlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 
 		int alpha = Integer.MIN_VALUE + 1;
 		int beta = Integer.MAX_VALUE - 1;
-		
-		//System.out.println(new Date() + " BEG");
-		
+
+		// System.out.println(new Date() + " BEG");
+
 		if (player == Oracle.PLAYER.PLAYER1) {
 			Collections.sort(list, new TransitionComparator(oracle,
 					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
@@ -76,64 +76,66 @@ public class FSAlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
 		}
 
-		//decision = list.get(0);	
-		
+		// decision = list.get(0);
+
 		int iterStep = 2;
 		if (forceOneThread) {
 			iterStep = 1;
 		}
-		
+
 		boolean debug = false;
-		
+
 		for (int i = 0; i < list.size(); i += iterStep) {
 			if (debug)
 				System.out.println("->" + i);
 
-				threads[0] = new FSAlphaBetaThread(0, this, new DelphiOracle(1, 2), new Transition(list.get(i)), maxDepth - 1, -beta, -alpha, 3 - plr);
-				threads[0].run();
-				if (! forceOneThread && (i + 1 < list.size())) {
-				threads[1] = new FSAlphaBetaThread(1, this, new DelphiOracle(1, 2), new Transition(list.get(i+1)), maxDepth - 1, -beta, -alpha, 3 - plr);
+			threads[0] = new FSAlphaBetaThread(0, this, new DelphiOracle(1, 2),
+					new Transition(list.get(i)), maxDepth - 1, -beta, -alpha,
+					3 - plr);
+			threads[0].run();
+			if (!forceOneThread && (i + 1 < list.size())) {
+				threads[1] = new FSAlphaBetaThread(1, this, new DelphiOracle(1,
+						2), new Transition(list.get(i + 1)), maxDepth - 1,
+						-beta, -alpha, 3 - plr);
 				threads[1].run();
+			}
+			try {
+				threads[0].join();
+				if (!forceOneThread && (i + 1 < list.size())) {
+					threads[1].join();
 				}
-				try {
-					threads[0].join();
-					if (! forceOneThread && (i + 1 < list.size())) {
-						threads[1].join();
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 
-				if (threadReturn[0] > alpha) {
-					alpha = threadReturn[0];
+			if (threadReturn[0] > alpha) {
+				alpha = threadReturn[0];
+				if (debug)
+					System.out.println("i: " + i + " NOWA ALFA: " + alpha);
+			}
+			if (alpha >= beta) {
+				break;
+			}
+			if (threadReturn[0] > decisionVal) {
+				decisionVal = threadReturn[0];
+				decision = list.get(i);
+			}
+			if (!forceOneThread && (i + 1 < list.size())) {
+				if (threadReturn[1] > alpha) {
+					alpha = threadReturn[1];
 					if (debug)
 						System.out.println("i: " + i + " NOWA ALFA: " + alpha);
 				}
 				if (alpha >= beta) {
 					break;
 				}
-				if (threadReturn[0] > decisionVal)
-				{
-					decisionVal = threadReturn[0];
-					decision = list.get(i);
+				if (threadReturn[1] > decisionVal) {
+					decisionVal = threadReturn[1];
+					decision = list.get(i + 1);
 				}
-				if (! forceOneThread && (i + 1 < list.size())) {
-					if (threadReturn[1] > alpha) {
-						alpha = threadReturn[1];
-						if (debug)
-							System.out.println("i: " + i + " NOWA ALFA: " + alpha);
-					}
-					if (alpha >= beta) {
-						break;
-					}
-					if (threadReturn[1] > decisionVal)
-					{
-						decisionVal = threadReturn[1];
-						decision = list.get(i+1);
-					}
-				}
+			}
 		}
-		
+
 		if (debug)
 			System.out.println("DECISION = " + decisionVal);
 
@@ -149,7 +151,7 @@ public class FSAlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 
 	@Override
 	public void threadEnd(int threadId, int value) {
-		threadReturn[threadId] = value;		
+		threadReturn[threadId] = value;
 	}
 }
 
@@ -162,11 +164,12 @@ class FSAlphaBetaThread extends Thread {
 	private int alpha;
 	private int beta;
 	private int player;
-	
-	public FSAlphaBetaThread() {}
 
-	public FSAlphaBetaThread(int threadId, ThreadEndEvent event, Oracle oracle, Transition transition, int depth, int alpha,
-			int beta, int player) {
+	public FSAlphaBetaThread() {
+	}
+
+	public FSAlphaBetaThread(int threadId, ThreadEndEvent event, Oracle oracle,
+			Transition transition, int depth, int alpha, int beta, int player) {
 		super();
 		this.threadId = threadId;
 		this.event = event;
@@ -177,28 +180,19 @@ class FSAlphaBetaThread extends Thread {
 		this.beta = beta;
 		this.player = player;
 	}
-	
+
 	public int alphaBeta(Transition transition, int depth, int alpha, int beta,
 			int player) {
 		if ((depth == 0) || FSAlphaBetaAI.isGameOver(transition.in)) {
-			//System.out.println("TERMINATE PLAYER# " + player + " WITH: " + oracle.getProphecy(transition, player));
-			//System.out.println(new Date() + " END");
+			// System.out.println("TERMINATE PLAYER# " + player + " WITH: " +
+			// oracle.getProphecy(transition, player));
+			// System.out.println(new Date() + " END");
 			return oracle.getProphecy(transition, player); // player
 		}
 		List<Transition> moves = transition.getNextGeneration(player);
-		
-		/*
-		if (player == 1) {
-			Collections.sort(moves, new TransitionComparator(oracle,
-					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
-		} else {
-			Collections.sort(moves, new TransitionComparator(oracle,
-					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
-		}
-		*/
-		
+
 		int best = Integer.MIN_VALUE;
-		
+
 		int value;
 		for (Transition m : moves) {
 			value = -alphaBeta(m, depth - 1, -beta, -alpha, 3 - player);
@@ -210,17 +204,9 @@ class FSAlphaBetaThread extends Thread {
 			}
 			if (best > alpha)
 				alpha = best;
-			/*
-			if (value > alpha)
-				alpha = value;
-			if (alpha >= beta) {
-				// System.out.println("ODCIÊCIE! @ LVL: " + depth);
-				return beta;
-			}
-			*/
 		}
 		moves.clear();
-		
+
 		return best;
 	}
 
@@ -229,4 +215,3 @@ class FSAlphaBetaThread extends Thread {
 		event.threadEnd(threadId, value);
 	}
 }
-

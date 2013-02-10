@@ -61,49 +61,50 @@ public class TransitionComparator implements Comparator<Transition> {
 	public int compare(Transition t1, Transition t2) {
 		int a1, a2, d1, d2;
 		if (player == Oracle.PLAYER.PLAYER1) { // na górze
-			if (t1.mainMove.angle == 4 || t1.mainMove.angle == 5 || t1.mainMove.angle == 3)
+			if (t1.mainMove.angle == 4 || t1.mainMove.angle == 5
+					|| t1.mainMove.angle == 3)
 				a1 = 1; // do przodu
 			else if (t1.mainMove.angle == 6 || t1.mainMove.angle == 2)
 				a1 = 0; // ruch w linii
 			else
 				a1 = -1;
-			
-			if (t2.mainMove.angle == 4 || t2.mainMove.angle == 5 || t2.mainMove.angle == 3)
+
+			if (t2.mainMove.angle == 4 || t2.mainMove.angle == 5
+					|| t2.mainMove.angle == 3)
 				a2 = 1; // do przodu
 			else if (t2.mainMove.angle == 6 || t2.mainMove.angle == 2)
 				a2 = 0; // ruch w linii
 			else
 				a2 = -1;
-		}
-		else { // dla gracza 2 - na dole planszy
-			if (t1.mainMove.angle == 7 || t1.mainMove.angle == 0 || t1.mainMove.angle == 1)
+		} else { // dla gracza 2 - na dole planszy
+			if (t1.mainMove.angle == 7 || t1.mainMove.angle == 0
+					|| t1.mainMove.angle == 1)
 				a1 = 1;
 			else if (t1.mainMove.angle == 6 || t1.mainMove.angle == 2)
 				a1 = 0;
 			else
 				a1 = -1;
-			
-			if (t2.mainMove.angle == 7 || t2.mainMove.angle == 0 || t2.mainMove.angle == 1)
+
+			if (t2.mainMove.angle == 7 || t2.mainMove.angle == 0
+					|| t2.mainMove.angle == 1)
 				a2 = 1;
 			else if (t2.mainMove.angle == 6 || t2.mainMove.angle == 2)
 				a2 = 0;
 			else
 				a2 = -1;
 		}
-		
+
 		if (a1 > a2) {
 			if (comparisionOrder == ORDER.DESC)
 				return -1;
 			else
 				return 1;
-		}
-		else if (a1 < a2) {
+		} else if (a1 < a2) {
 			if (comparisionOrder == ORDER.DESC)
 				return 1;
 			else
 				return -1;
-		}
-		else {
+		} else {
 			d1 = t1.mainMove.distance;
 			d2 = t2.mainMove.distance;
 			if (d1 > d2) {
@@ -111,36 +112,23 @@ public class TransitionComparator implements Comparator<Transition> {
 					return -1;
 				else
 					return 1;
-			}
-			else if (d1 < d2) {
+			} else if (d1 < d2) {
 				if (comparisionOrder == ORDER.DESC)
 					return 1;
 				else
 					return -1;
-			}
-			else
+			} else
 				return 0;
 		}
 	}
-	
-	/*// stary komparator
-	public int compare(Transition t1, Transition t2) {
-		int val1 = oracle.getProphecy(t1, player);
-		int val2 = oracle.getProphecy(t2, player);
-		if (val1 > val2) {
-			if (comparisionOrder == ORDER.DESC)
-				return -1;
-			else
-				return 1;
-		}
-		if (val1 < val2) {
-			if (comparisionOrder == ORDER.DESC)
-				return 1;
-			else
-				return -1;
-		} else
-			return 0;
-	}
-	*/
+
+	/*
+	 * // stary komparator public int compare(Transition t1, Transition t2) {
+	 * int val1 = oracle.getProphecy(t1, player); int val2 =
+	 * oracle.getProphecy(t2, player); if (val1 > val2) { if (comparisionOrder
+	 * == ORDER.DESC) return -1; else return 1; } if (val1 < val2) { if
+	 * (comparisionOrder == ORDER.DESC) return 1; else return -1; } else return
+	 * 0; }
+	 */
 
 }

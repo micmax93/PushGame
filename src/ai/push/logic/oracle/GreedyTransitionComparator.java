@@ -51,7 +51,8 @@ public class GreedyTransitionComparator implements Comparator<Transition> {
 	 * @param order
 	 *            Porz¹dek sortowania: ASC (rosn¹cy), DESC (malej¹cy).
 	 */
-	public GreedyTransitionComparator(Oracle oracle, Oracle.PLAYER player, ORDER order) {
+	public GreedyTransitionComparator(Oracle oracle, Oracle.PLAYER player,
+			ORDER order) {
 		this.oracle = oracle;
 		this.player = player;
 		this.comparisionOrder = order;

@@ -9,8 +9,6 @@ import ai.push.logic.Transition;
 import ai.push.logic.oracle.DistancesEgoisticOracle;
 import ai.push.logic.oracle.GreedyTransitionComparator;
 import ai.push.logic.oracle.Oracle;
-import ai.push.logic.oracle.TransitionComparator;
-import ai.push.logic.oracle.TransitionComparator.ORDER;
 
 /**
  * Przyk³adowa implementacja AI dla modelu zach³annego.
@@ -22,7 +20,7 @@ public class GreedyAI extends AbstractAI {
 	public GreedyAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
 		oracle = new DistancesEgoisticOracle(1, 2);
-//		oracle = new RankOracle(1, 2);
+		// oracle = new RankOracle(1, 2);
 	}
 
 	@Override
@@ -31,12 +29,13 @@ public class GreedyAI extends AbstractAI {
 	 */
 	protected void algorithm() {
 		System.out.println("G " + new Date());
-		
+
 		List<Transition> listSorted = list;
-			
-		Collections.sort(listSorted, new GreedyTransitionComparator(oracle, player, GreedyTransitionComparator.ORDER.DESC));
+
+		Collections.sort(listSorted, new GreedyTransitionComparator(oracle,
+				player, GreedyTransitionComparator.ORDER.DESC));
 		Transition decision = listSorted.get(0);
-		
+
 		boolean found = false;
 		List<Transition> next;
 

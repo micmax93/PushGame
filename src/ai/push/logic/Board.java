@@ -117,11 +117,7 @@ public class Board implements Serializable
 				break;
 			}
 			chain.add(mov.destination);
-			mov = mov.next();
-			if (mov == null)
-			{
-				break;
-			}
+			mov = new Movement(mov.destination,angle);
 		}
 		return chain;
 	}
@@ -142,7 +138,7 @@ public class Board implements Serializable
 			return false;
 		}
 		List<Field> lst = getChain(mov.origin, mov.angle);
-		Field last = lst.get(lst.size() - 1);//lastElement();
+		Field last = lst.get(lst.size() - 1);
 		for (int d = 1; d <= mov.distance; d++)
 		{
 			Movement lastMove = new Movement(last, mov.angle, d);

@@ -45,15 +45,15 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 
 		rb1.setBounds(10, 5, 112, 30);
 		rb1.setSelected(true);
-		rb2.setBounds(300, 5, 90, 30);
+		rb2.setBounds(325, 5, 90, 30);
 		bg.add(rb1);
 		bg.add(rb2);
-		add(rb1);
-		add(rb2);
+		getContentPane().add(rb1);
+		getContentPane().add(rb2);
 
 		cc1.setBounds(0, 40, 620, 400);
-		add(cc1);
-		setLayout(null);
+		getContentPane().add(cc1);
+		getContentPane().setLayout(null);
 		rb1.addActionListener(this);
 		rb2.addActionListener(this);
 		cc1.getSelectionModel().addChangeListener(this);
@@ -63,45 +63,45 @@ public class PlayerWindow extends JFrame implements ChangeListener,
 		prev1.setVisible(true);
 		prev1.setBackground(Settings.C1);
 		prev1.setEnabled(false);
-		add(prev1);
+		getContentPane().add(prev1);
 
 		cb1.addItem("Gracz");
 		AIFactory.addAlgos(cb1);
-		cb1.setBounds(154, 10, 100, 20);
+		cb1.setBounds(154, 10, 119, 20);
 		if (Settings.AI1)
 		{
 			cb1.setSelectedItem(AIFactory.algoAI1);
 		}
 		cb1.addActionListener(this);
-		add(cb1);
+		getContentPane().add(cb1);
 		
-		md1.setBounds(254, 10, 35, 20);
+		md1.setBounds(272, 10, 35, 20);
 		AIFactory.loadDepths(1,(String) cb1.getSelectedItem(), md1);
 		md1.setVisible(md1.getItemCount()>0);
 		md1.addActionListener(this);
-		add(md1);
+		getContentPane().add(md1);
 
-		prev2.setBounds(391, 10, 30, 20);
+		prev2.setBounds(416, 10, 30, 20);
 		prev2.setVisible(true);
 		prev2.setBackground(Settings.C2);
 		prev2.setEnabled(false);
-		add(prev2);
+		getContentPane().add(prev2);
 
 		cb2.addItem("Gracz");
 		AIFactory.addAlgos(cb2);
-		cb2.setBounds(422, 10, 100, 20);
+		cb2.setBounds(447, 10, 119, 20);
 		if (Settings.AI2)
 		{
 			cb2.setSelectedItem(AIFactory.algoAI2);
 		}
 		cb2.addActionListener(this);
-		add(cb2);
+		getContentPane().add(cb2);
 		
-		md2.setBounds(522, 10, 35, 20);
+		md2.setBounds(567, 10, 35, 20);
 		AIFactory.loadDepths(2,(String) cb2.getSelectedItem(), md2);
 		md2.setVisible(md2.getItemCount()>0);
 		md2.addActionListener(this);
-		add(md2);
+		getContentPane().add(md2);
 
 	}
 

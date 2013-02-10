@@ -7,6 +7,7 @@ import java.util.List;
 import ai.push.logic.Logic;
 import ai.push.logic.Transition;
 import ai.push.logic.oracle.DistancesEgoisticOracle;
+import ai.push.logic.oracle.GreedyTransitionComparator;
 import ai.push.logic.oracle.Oracle;
 import ai.push.logic.oracle.TransitionComparator;
 import ai.push.logic.oracle.TransitionComparator.ORDER;
@@ -33,7 +34,7 @@ public class GreedyAI extends AbstractAI {
 		
 		List<Transition> listSorted = list;
 			
-		Collections.sort(listSorted, new TransitionComparator(oracle, player, ORDER.DESC));
+		Collections.sort(listSorted, new GreedyTransitionComparator(oracle, player, GreedyTransitionComparator.ORDER.DESC));
 		Transition decision = listSorted.get(0);
 		
 		boolean found = false;

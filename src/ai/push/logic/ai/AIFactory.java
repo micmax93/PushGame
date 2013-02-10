@@ -10,9 +10,10 @@ public class AIFactory
 	static final public String GREEDY_AI="AI zach³anny";
 	static final public String ALPHA_BETA_AI="AI alfa-beta";
 	static final public String RANDOM_AI="AI losowy";
+	static final public String FS_ALPHA_BETA = "AI alfa-beta FS";
 	
 	static public String algoAI1=GREEDY_AI;
-	static public Integer depthAI1=2;
+	static public Integer depthAI1=4;
 	static public String algoAI2=ALPHA_BETA_AI;
 	static public Integer depthAI2=4;
 	
@@ -22,11 +23,12 @@ public class AIFactory
 		cb.addItem(RANDOM_AI);
 		cb.addItem(GREEDY_AI);
 		cb.addItem(ALPHA_BETA_AI);
+		cb.addItem(FS_ALPHA_BETA);
 	}
 	
 	static public void loadDepths(int aiID,String algo,JComboBox<Integer> cb)
 	{
-		if(algo==ALPHA_BETA_AI)
+		if(algo==ALPHA_BETA_AI || algo == FS_ALPHA_BETA)
 		{
 			cb.removeAllItems();
 			cb.addItem(2);
@@ -102,6 +104,11 @@ public class AIFactory
 		else if(ai==ALPHA_BETA_AI)
 		{
 			result=new AlphaBetaAI(logic, player);
+			result.setMaxDepth(md);
+		}
+		else if(ai==FS_ALPHA_BETA)
+		{
+			result=new FSAlphaBetaAI(logic, player);
 			result.setMaxDepth(md);
 		}
 		return result;

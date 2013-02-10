@@ -11,20 +11,20 @@ import ai.push.logic.oracle.DelphiOracle;
 import ai.push.logic.oracle.Oracle;
 import ai.push.logic.oracle.TransitionComparator;
 
-public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
+public class FSAlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 	
 	private int[] threadReturn;
-	private AlphaBetaThread[] threads;
+	private FSAlphaBetaThread[] threads;
 	private boolean forceOneThread = false;
 	
-	public AlphaBetaAI(Logic logic, Oracle.PLAYER player) {
+	public FSAlphaBetaAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
 //		oracle = new RankOracle(1, 2);
 //		oracle = new LogarithmicOracle(1, 2);
 		oracle = new DelphiOracle(1, 2);
 //		oracle = new ExponentialOracle(1, 2); // tu ustawiasz wyroczniê
 		threadReturn = new int[2];
-		threads = new AlphaBetaThread[2];
+		threads = new FSAlphaBetaThread[2];
 	}
 
 	public static boolean isGameOver(Board board) {
@@ -89,10 +89,10 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 			if (debug)
 				System.out.println("->" + i);
 
-				threads[0] = new AlphaBetaThread(0, this, new DelphiOracle(1, 2), new Transition(list.get(i)), maxDepth - 1, -beta, -alpha, 3 - plr);
+				threads[0] = new FSAlphaBetaThread(0, this, new DelphiOracle(1, 2), new Transition(list.get(i)), maxDepth - 1, -beta, -alpha, 3 - plr);
 				threads[0].run();
 				if (! forceOneThread && (i + 1 < list.size())) {
-				threads[1] = new AlphaBetaThread(1, this, new DelphiOracle(1, 2), new Transition(list.get(i+1)), maxDepth - 1, -beta, -alpha, 3 - plr);
+				threads[1] = new FSAlphaBetaThread(1, this, new DelphiOracle(1, 2), new Transition(list.get(i+1)), maxDepth - 1, -beta, -alpha, 3 - plr);
 				threads[1].run();
 				}
 				try {
@@ -153,7 +153,7 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 	}
 }
 
-class AlphaBetaThread extends Thread {
+class FSAlphaBetaThread extends Thread {
 	private int threadId;
 	private Transition transition;
 	private ThreadEndEvent event;
@@ -163,9 +163,9 @@ class AlphaBetaThread extends Thread {
 	private int beta;
 	private int player;
 	
-	public AlphaBetaThread() {}
+	public FSAlphaBetaThread() {}
 
-	public AlphaBetaThread(int threadId, ThreadEndEvent event, Oracle oracle, Transition transition, int depth, int alpha,
+	public FSAlphaBetaThread(int threadId, ThreadEndEvent event, Oracle oracle, Transition transition, int depth, int alpha,
 			int beta, int player) {
 		super();
 		this.threadId = threadId;
@@ -180,13 +180,14 @@ class AlphaBetaThread extends Thread {
 	
 	public int alphaBeta(Transition transition, int depth, int alpha, int beta,
 			int player) {
-		if ((depth == 0) || AlphaBetaAI.isGameOver(transition.in)) {
+		if ((depth == 0) || FSAlphaBetaAI.isGameOver(transition.in)) {
 			//System.out.println("TERMINATE PLAYER# " + player + " WITH: " + oracle.getProphecy(transition, player));
 			//System.out.println(new Date() + " END");
 			return oracle.getProphecy(transition, player); // player
 		}
 		List<Transition> moves = transition.getNextGeneration(player);
 		
+		/*
 		if (player == 1) {
 			Collections.sort(moves, new TransitionComparator(oracle,
 					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
@@ -194,30 +195,38 @@ class AlphaBetaThread extends Thread {
 			Collections.sort(moves, new TransitionComparator(oracle,
 					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
 		}
+		*/
+		
+		int best = Integer.MIN_VALUE;
 		
 		int value;
 		for (Transition m : moves) {
 			value = -alphaBeta(m, depth - 1, -beta, -alpha, 3 - player);
+			if (value > best)
+				best = value;
+			if (best >= beta) {
+				// System.out.println("ODCIÊCIE! @ LVL: " + depth);
+				break;
+			}
+			if (best > alpha)
+				alpha = best;
+			/*
 			if (value > alpha)
 				alpha = value;
 			if (alpha >= beta) {
 				// System.out.println("ODCIÊCIE! @ LVL: " + depth);
 				return beta;
 			}
+			*/
 		}
 		moves.clear();
 		
-		return alpha;
+		return best;
 	}
 
 	public void run() {
 		int value = -alphaBeta(transition, depth, alpha, beta, player);
 		event.threadEnd(threadId, value);
 	}
-}
-
-
-interface ThreadEndEvent {
-	public void threadEnd(int threadId, int value);
 }
 

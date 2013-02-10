@@ -47,19 +47,7 @@ public class DelphiOracle extends Oracle {
 				}
 			}
 		}
-		if (player == PLAYER.PLAYER1
-				&& (transition.mainMove.angle == 7
-						|| transition.mainMove.angle == 0 || transition.mainMove.angle == 1)) {
-			prophecy /= 10;
-			prophecy *= 7;
-		} else if (player == PLAYER.PLAYER2
-				&& (transition.mainMove.angle == 5
-						|| transition.mainMove.angle == 4 || transition.mainMove.angle == 3)) {
-			prophecy /= 10;
-			prophecy *= 7;
-		}
-
-		return prophecy;
+		return prophecy; //prophecy;
 	}
 
 	/*

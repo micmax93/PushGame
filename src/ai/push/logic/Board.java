@@ -229,6 +229,44 @@ public class Board implements Serializable
 		return transitions;
 	}
 	
+
+	FieldColection[] srcFields=new FieldColection[3];
+	Movement[] currMovement=new Movement[3];
+	boolean[] srchFinished=new boolean[3];
+	public Transition getNextTransition(int id) {
+		if(srchFinished[id]) {return null;}
+		if(srcFields[id]==null)
+		{
+			srcFields[id]=new FieldColection();
+			for(int i=0;i<size;i++)
+			{
+				for(int j=0;j<size;j++)
+				{
+					if(tab[i][j]==id)
+					{
+						srcFields[id].addField(new Field(i, j));
+					}
+				}
+			}	
+			srcFields[id].randomize();
+			currMovement[id]=srcFields[id].getNextInitialMovement();
+		}
+		else
+		{
+			currMovement[id]=currMovement[id].next();
+		}
+		while(!isExecutable(currMovement[id]))
+		{
+			currMovement[id]=srcFields[id].getNextInitialMovement();
+			if(currMovement[id]==null)
+			{
+				srchFinished[id]=true;
+				return null;
+			}
+		}
+		return new Transition(this, currMovement[id]);
+	}
+	
 	/**
 	 * Generuje wszystkie wykonywalne ruchy dla danego u¿ytkownika.
 	 * @param id

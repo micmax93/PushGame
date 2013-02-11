@@ -7,7 +7,7 @@ package ai.push.logic;
 public class Movement
 {
 	public Field origin, destination;
-	public int distance;
+	public int distance, chainSize;
 	/**
 	 * K¹t który jest zdefiniowany jako liczba ca³kowita z przedzia³u <0;7>.
 	 * K¹t jest zdefiniowany zgodnie z ruchem wskazówek zegara od 0.

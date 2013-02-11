@@ -151,6 +151,7 @@ public class Board implements Serializable
 				return false;
 			}
 		}
+		mov.chainSize=lst.size();
 		return true;
 	}
 	

@@ -105,8 +105,8 @@ public class TransitionComparator implements Comparator<Transition> {
 			else
 				return -1;
 		} else {
-			d1 = t1.mainMove.distance;
-			d2 = t2.mainMove.distance;
+			d1 = t1.mainMove.distance * t1.mainMove.chainSize;
+			d2 = t2.mainMove.distance * t2.mainMove.chainSize;
 			if (d1 > d2) {
 				if (comparisionOrder == ORDER.DESC)
 					return -1;

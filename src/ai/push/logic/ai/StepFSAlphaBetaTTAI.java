@@ -17,14 +17,14 @@ import ai.push.logic.oracle.LogarithmicOracle;
 import ai.push.logic.oracle.Oracle;
 import ai.push.logic.oracle.TransitionComparator;
 
-public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
+public class StepFSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 
 	private int[] threadReturn;
-	private FSAlphaBetaTTThread[] threads;
+	private StepFSAlphaBetaTTThread[] threads;
 	private boolean forceOneThread = false;
 	private Oracle oracle2;
 
-	public FSAlphaBetaTTAI(Logic logic, Oracle.PLAYER player) {
+	public StepFSAlphaBetaTTAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
 		// oracle = new RankOracle(1, 2);
 //		oracle = new LogarithmicOracle(1, 2);
@@ -34,7 +34,7 @@ public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 		
 		// oracle = new ExponentialOracle(1, 2); // tu ustawiasz wyroczniê
 		threadReturn = new int[2];
-		threads = new FSAlphaBetaTTThread[2];
+		threads = new StepFSAlphaBetaTTThread[2];
 		//magicTable = new TranspositionTable();
 	}
 
@@ -105,12 +105,12 @@ public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 			if (debug)
 				System.out.println("->" + i);
 
-			threads[0] = new FSAlphaBetaTTThread(0, this, oracle,
+			threads[0] = new StepFSAlphaBetaTTThread(0, this, oracle,
 					new Transition(list.get(i)), maxDepth - 1, -beta, -alpha,
 					3 - plr, magicTable, list.get(i).in);
 			threads[0].run();
 			if (!forceOneThread && (i + 1 < list.size())) {
-				threads[1] = new FSAlphaBetaTTThread(1, this, oracle2, 
+				threads[1] = new StepFSAlphaBetaTTThread(1, this, oracle2, 
 						new Transition(list.get(i + 1)), maxDepth - 1,
 						-beta, -alpha, 3 - plr, magicTable, list.get(i+1).in);
 				threads[1].run();
@@ -176,7 +176,7 @@ public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 	}
 }
 
-class FSAlphaBetaTTThread extends Thread {
+class StepFSAlphaBetaTTThread extends Thread {
 	private int threadId;
 	private Transition transition;
 	private ThreadEndEvent event;
@@ -188,10 +188,10 @@ class FSAlphaBetaTTThread extends Thread {
 	private TranspositionHashStorage magicTable;
 	private Board root;
 
-	public FSAlphaBetaTTThread() {
+	public StepFSAlphaBetaTTThread() {
 	}
 
-	public FSAlphaBetaTTThread(int threadId, ThreadEndEvent event, Oracle oracle,
+	public StepFSAlphaBetaTTThread(int threadId, ThreadEndEvent event, Oracle oracle,
 			Transition transition, int depth, int alpha, int beta, int player, TranspositionHashStorage magicTable, Board root) {
 		super();
 		this.threadId = threadId;
@@ -208,38 +208,14 @@ class FSAlphaBetaTTThread extends Thread {
 
 	public int alphaBeta(Transition transition, int depth, int alpha, int beta,
 			int player) {
-		if ((depth == 0) || FSAlphaBetaTTAI.isGameOver(transition.in)) {
+		if ((depth == 0) || StepFSAlphaBetaTTAI.isGameOver(transition.in)) {
 			//return oracle.getProphecy(transition, player);
 			return oracle.getProphecy(transition.getCopyWithCustomIn(root), player);
 		}
 		
-		//System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
-		
 		int prevAlpha = alpha;
 		
-		//long startTime = System.nanoTime(); 
-
-		
-//		// dobry hash
-//		StringBuilder hash = new StringBuilder();
-//		int size = transition.out.getWidth() - 1;
-//		for (int r = size; r >= 0; --r) {
-//			for (int c = size; c >= 0; --c) {
-//				hash.append(String.valueOf(transition.out.tab[r][c]));
-//			}
-//		}
-//		
-//		//System.out.println("HASH = " + transition.out.hash64);
-//
-//		String hashCode = hash.toString();
-		
-		//long estimatedTime = System.nanoTime() - startTime;
-		//System.out.println("HASH_BUILD_COST: " + estimatedTime + " SIZE=" + hash.length());
-		
-		//Transposition t = magicTable.get(transition.out); // TODO
-		
-//		Transposition t = magicTable.get(hashCode); // TODO
-		Transposition t = magicTable.get(transition.out.hash64); // TODO
+		Transposition t = magicTable.get(transition.out.hash64);
 		
 		if (t != null) { // jeœli znaleziono coœ w tablicy transpozycji
 			if (t.getDepth() >= depth) { // i wynik mo¿e mieæ znaczenie na tym poziomie
@@ -255,13 +231,14 @@ class FSAlphaBetaTTThread extends Thread {
 			if (alpha >= beta) // odciêcie
 				return t.getValue();
 		}
-		
+		/*
 		List<Transition> moves = new ArrayList<Transition>();
 		if (t != null && t.getNext() != null) {
 			moves.add(t.getNext());
 		}
 		moves.addAll(transition.getNextGeneration(player));
-		
+		*/
+		/*
 		if (player == 1) {
 			Collections.sort(moves, new TransitionComparator(oracle,
 					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
@@ -269,12 +246,22 @@ class FSAlphaBetaTTThread extends Thread {
 			Collections.sort(moves, new TransitionComparator(oracle,
 					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
 		}
+		*/
 		
 		int best = Integer.MIN_VALUE;
 		Transition nextBest = null;
 
 		int value;
-		for (Transition m : moves) {
+		Transition m;
+		
+		if (t != null && t.getNext() != null) {
+			m = t.getNext();
+		}
+		else {
+			m = transition.out.getNextTransition(player);
+		}
+		//for (Transition m : moves) {
+		while (m != null) {
 			value = -alphaBeta(m, depth - 1, -beta, -alpha, 3 - player);
 			if (value > best) {
 				best = value;
@@ -286,12 +273,10 @@ class FSAlphaBetaTTThread extends Thread {
 			}
 			if (best > alpha)
 				alpha = best;
+			m = transition.out.getNextTransition(player);
 		}
-		moves.clear();
 		
 		if (nextBest != null) { //  && depth > 1
-//			magicTable.put(transition.out, new Transposition(best, depth, prevAlpha, beta, nextBest));
-//			magicTable.put(hashCode, new Transposition(best, depth, prevAlpha, beta, nextBest));
 			magicTable.put(transition.out.hash64, new Transposition(best, depth, prevAlpha, beta, nextBest));
 		}
 

@@ -1,6 +1,53 @@
 package ai.push.logic;
 
+import java.util.Random;
+
 public class HashUtils {
+	
+	public static long[][] ZOBRIST_KEYS;
+	public static final long[] SOME_RANDOM_LONGS = {
+		0xdeadbeef,
+		0xe1fb1511,
+		0x5eed5eed
+	};
+	private long x;
+	private int width;
+	
+	public HashUtils(int width) {
+		this.width = width;
+		ZOBRIST_KEYS = new long[2][width*width];
+		x = SOME_RANDOM_LONGS[new Random().nextInt(2)];
+		for (int i = 0; i < width * width; ++i) {
+			x ^= (x << 21);
+			x ^= (x >>> 35);
+			x ^= (x << 4);
+			ZOBRIST_KEYS[0][i] = x;
+			x ^= (x << 21);
+			x ^= (x >>> 35);
+			x ^= (x << 4);
+			ZOBRIST_KEYS[1][i] = x;
+		}
+	}	
+	
+	public boolean checkUnique() {
+		long a, b;
+		boolean found = false;
+		for (int i = 0; i < width*width; ++i) {	
+			a = ZOBRIST_KEYS[0][i];
+			b = ZOBRIST_KEYS[0][i];
+			for (int j = i+1; j < width*width; ++j) {
+				if (ZOBRIST_KEYS[0][j] == a || ZOBRIST_KEYS[1][j] == b) {
+					found = true;
+					return false;
+				}
+			}
+		}
+		if (!found)
+			return true;
+		return false;		
+	}
+	
+	/*
 	public static final byte[][] CHAR_ID_8X8 = new byte[][] {
 		{ 0,  0,  0,  0,  0,  1,  1,  1},
 		{ 1,  1,  2,  2,  2,  2,  2,  3},
@@ -66,6 +113,7 @@ public class HashUtils {
 			tab[CHAR_ID_8X8[row][col]]&=~(1 << BIT_MASK_8X8[row][col]+2);
 		}
 	}
+	*/
 }
 
 /*

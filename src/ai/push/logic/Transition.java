@@ -75,6 +75,12 @@ public class Transition
 		*/
 	}
 	
+	public Transition getCopyWithCustomIn(Board in) {
+		Transition t = new Transition(this);
+		t.in = in;
+		return t;
+	}
+	
 	/**
 	 * Generuje mo¿liwe ruchy dla sytuacji po wykanoniu aktualnie opisywanego.
 	 * Mo¿liwe jest wygenerowanie ruchów dla dowolnego z graczy.

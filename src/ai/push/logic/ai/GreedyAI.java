@@ -6,6 +6,7 @@ import java.util.List;
 
 import ai.push.logic.Logic;
 import ai.push.logic.Transition;
+import ai.push.logic.oracle.DelphiOracle;
 import ai.push.logic.oracle.DistancesEgoisticOracle;
 import ai.push.logic.oracle.GreedyTransitionComparator;
 import ai.push.logic.oracle.Oracle;
@@ -20,6 +21,7 @@ public class GreedyAI extends AbstractAI {
 	public GreedyAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
 		oracle = new DistancesEgoisticOracle(1, 2);
+		//oracle = new DelphiOracle(1, 2);
 		usingDelay=true;
 	}
 	

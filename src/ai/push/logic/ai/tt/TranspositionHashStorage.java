@@ -7,14 +7,17 @@ public interface TranspositionHashStorage {
 	public Transposition get(Board b);
 	
 	public Transposition get(String key);
+	public Transposition get(long key);
 	
 	public void put(Board b, Transposition t);
 	
 	public void put(String key, Transposition t);
+	public void put(long key, Transposition t);
 	
 	public void remove(Board b);
 	
 	public void remove(String key);
+	public void remove(long key);
 	
 	public void clearSoft();
 	

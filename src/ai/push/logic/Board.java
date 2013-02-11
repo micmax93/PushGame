@@ -10,7 +10,8 @@ public class Board implements Serializable
 {
 	private static final long serialVersionUID = 888670286751254258L;
 	public byte tab[][];
-	final byte size,rowcount;
+	public final byte size,rowcount;
+	public long hash64;
 
 	/**
 	 * Zwraca wartoœæ pola na szachownicy.
@@ -49,6 +50,8 @@ public class Board implements Serializable
 	 */
 	public Board()
 	{
+		hash64 = 0;
+		
 		size = (byte) Settings.size;
 		rowcount=(byte) Settings.rowCount;
 		tab = new byte[size][size];
@@ -61,10 +64,12 @@ public class Board implements Serializable
 				if (w < beg)
 				{
 					tab[w][k] = 1;
+					hash64 ^= HashUtils.ZOBRIST_KEYS[0][w*size+k];
 				}
 				else if (w >= end)
 				{
 					tab[w][k] = 2;
+					hash64 ^= HashUtils.ZOBRIST_KEYS[1][w*size+k];
 				}
 				else
 				{
@@ -81,6 +86,7 @@ public class Board implements Serializable
 	 */
 	public Board(Board copy)
 	{
+		hash64 = copy.hash64;
 		size=copy.size;
 		rowcount=copy.rowcount;
 		tab=new byte[size][size];
@@ -193,6 +199,10 @@ public class Board implements Serializable
 		for (int i = chain.size() - 1; i >= 0; i--)
 		{
 			Movement curr = new Movement(chain.get(i), mov.angle, mov.distance);
+			
+			hash64 ^= HashUtils.ZOBRIST_KEYS[id-1][curr.origin.row*size + curr.origin.column];
+			hash64 ^= HashUtils.ZOBRIST_KEYS[id-1][curr.destination.row*size + curr.destination.column];
+			
 			setValue(curr.destination, id);
 			setValue(curr.origin, (byte)0);
 		}
@@ -227,6 +237,44 @@ public class Board implements Serializable
 		}
 		Collections.shuffle(transitions);
 		return transitions;
+	}
+	
+	
+	FieldColection[] srcFields=new FieldColection[3];
+	Movement[] currMovement=new Movement[3];
+	boolean[] srchFinished=new boolean[3];
+	public Transition getNextTransition(int id) {
+		if(srchFinished[id]) {return null;}
+		if(srcFields[id]==null)
+		{
+			srcFields[id]=new FieldColection();
+			for(int i=0;i<size;i++)
+			{
+				for(int j=0;j<size;j++)
+				{
+					if(tab[i][j]==id)
+					{
+						srcFields[id].addField(new Field(i, j));
+					}
+				}
+			}	
+			srcFields[id].randomize();
+			currMovement[id]=srcFields[id].getNextInitialMovement();
+		}
+		else
+		{
+			currMovement[id]=currMovement[id].next();
+		}
+		while(!isExecutable(currMovement[id]))
+		{
+			currMovement[id]=srcFields[id].getNextInitialMovement();
+			if(currMovement[id]==null)
+			{
+				srchFinished[id]=true;
+				return null;
+			}
+		}
+		return new Transition(this, currMovement[id]);
 	}
 	
 	/**

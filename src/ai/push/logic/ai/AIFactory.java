@@ -12,6 +12,7 @@ public class AIFactory
 	static final public String RANDOM_AI="AI losowy";
 	static final public String FS_ALPHA_BETA = "AI alfa-beta FS";
 	static final public String FS_ALPHA_BETA_TT = "AI alfa-beta FS TT";
+	static final public String STEP_FS_ALPHA_BETA_TT = "AI krokowy alfa-beta FS TT";
 	static final public String BLS_TEST = "Algo BLS";
 	static final public String ELF_TEST = "Algo ELF";
 	
@@ -29,13 +30,14 @@ public class AIFactory
 		cb.addItem(ALPHA_BETA_AI);
 		cb.addItem(FS_ALPHA_BETA);
 		cb.addItem(FS_ALPHA_BETA_TT);
+		cb.addItem(STEP_FS_ALPHA_BETA_TT);
 		cb.addItem(ELF_TEST);
 		cb.addItem(BLS_TEST);
 	}
 	
 	static public void loadDepths(int aiID,String algo,JComboBox<Integer> cb)
 	{
-		if(algo==ALPHA_BETA_AI || algo == FS_ALPHA_BETA || algo == FS_ALPHA_BETA_TT)
+		if(algo==ALPHA_BETA_AI || algo == FS_ALPHA_BETA || algo == FS_ALPHA_BETA_TT || algo == STEP_FS_ALPHA_BETA_TT)
 		{
 			cb.removeAllItems();
 			cb.addItem(2);
@@ -133,6 +135,12 @@ public class AIFactory
 			result=new FSAlphaBetaTTAI(logic, player);
 			result.setMaxDepth(md);
 		}
+		else if(ai == STEP_FS_ALPHA_BETA_TT)
+		{
+			result=new FSAlphaBetaTTAI(logic, player);
+			result.setMaxDepth(md);
+		}
+		
 		return result;
 	}
 }

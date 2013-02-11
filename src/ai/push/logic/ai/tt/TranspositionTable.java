@@ -141,4 +141,22 @@ public class TranspositionTable implements TranspositionHashStorage {
 	public void clearAll() {
 		transpositions.clear();		
 	}
+
+	@Override
+	public Transposition get(long key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void put(long key, Transposition t) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void remove(long key) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -21,6 +21,66 @@ public class DelphiOracle extends Oracle {
 		return new DistancesEgoisticOracle(player1, player2).getProphecy(board,
 				player);
 	}
+	
+	int countBoardFill(Board b, PLAYER p)
+	{
+		int n=0;
+		if(p==PLAYER.PLAYER2)
+		{
+			for(int i=0;i<2;i++)
+			{
+				for(int j=0;j<b.size;j++)
+				{
+					if(b.tab[i][j]==2)
+					{
+						n++;
+					}
+				}
+			}
+		}
+		else if(p==PLAYER.PLAYER1)
+		{
+			for(int i=b.size-2;i<b.size;i++)
+			{
+				for(int j=0;j<b.size;j++)
+				{
+					if(b.tab[i][j]==1)
+					{
+						n++;
+					}
+				}
+			}
+		}
+		return n;
+	}
+	
+	int countBoardDist(Board b, PLAYER p)
+	{
+		int n=0,val=0,id=0;
+		if(p==PLAYER.PLAYER2)
+			{id=2;}
+		else if(p==PLAYER.PLAYER1)
+			{id=1;}
+		
+		for(int i=2;i<b.size-2;i++)
+		{
+			n=0;
+			for(int j=0;j<b.size;j++)
+			{
+				if(b.tab[i][j]==id)
+				{
+					n++;
+				}
+			}
+			
+			if(p==PLAYER.PLAYER2)
+				{val+=n*(b.size-i)/2;}
+			else if(p==PLAYER.PLAYER1)
+				{val+=n*(i)/2;}
+			
+		}
+		return val;
+	}
 
 	@Override
 	public int getProphecy(Transition transition, PLAYER player) {
@@ -30,34 +90,21 @@ public class DelphiOracle extends Oracle {
 		} else {
 			plr = player2;
 		}
-		//int plr2 = 3 - plr;
-		// int rank = 0;
+		PLAYER enemy;
+		if (player == PLAYER.PLAYER1)
+			enemy = PLAYER.PLAYER2;
+		else
+			enemy = PLAYER.PLAYER1;
+		
 		int prophecy = 0;
-		//int enemy = 0;
-		// double improvement = 0.0f;
-		int size = transition.out.getWidth();
-
-		for (int r = 0; r < size; ++r) {
-			for (int c = 0; c < size; ++c) {
-				if (transition.out.tab[r][c] == plr) {
-					if (plr == player1) { // player at the top of the board
-						prophecy += DISTANCES_RANKS[r];
-						// value=r+1)
-					} else {
-						prophecy += DISTANCES_RANKS[size - 1 - r];
-					}
-				}
-				/* else if (transition.out.tab[r][c] == plr2) {
-					if (plr2 == player1) { // player at the top of the board
-						enemy += DISTANCES_RANKS[r];
-						// value=r+1)
-					} else {
-						enemy += DISTANCES_RANKS[size - 1 - r];
-					}
-				}
-				*/
-			}
-		}
+		int q=countBoardFill(transition.out, player)-countBoardFill(transition.in, player);
+		int qq = countBoardFill(transition.out, enemy)-countBoardFill(transition.in, enemy);
+		int dd=countBoardDist(transition.out, player)-countBoardDist(transition.in, player);
+		int ddd=countBoardDist(transition.out, enemy)-countBoardDist(transition.in, enemy);
+		prophecy=q*100+dd - (qq*100+ddd);
+		
+		//System.out.println("PR = " + prophecy);
+		
 		return prophecy; //prophecy;
 	}
 

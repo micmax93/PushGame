@@ -15,7 +15,7 @@ public class Movement
 	 * 6 | X | 2
 	 * 5 | 4 | 3
 	 */
-	public int angle;
+	public byte angle = 0;
 
 	/**
 	 * Konstruktor wyliczaj¹cy pole docelowe.
@@ -26,7 +26,7 @@ public class Movement
 	 * @param dist
 	 * Odleg³oœæ jak¹ przebêdzie ruch.
 	 */
-	public Movement(Field src, int ang, byte dist) {
+	public Movement(Field src, byte ang, byte dist) {
 		origin = src;
 		distance = dist;
 		angle = ang;
@@ -60,7 +60,7 @@ public class Movement
 	 * @param ang
 	 * K¹t ruchu.
 	 */
-	public Movement(Field src, int ang) {
+	public Movement(Field src, byte ang) {
 		this(src, ang, (byte)1);
 	}
 

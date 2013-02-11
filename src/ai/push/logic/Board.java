@@ -102,7 +102,7 @@ public class Board implements Serializable
 	 * @return
 	 * Lista pól nale¿¹cych do szeregu.
 	 */
-	List<Field> getChain(Field origin, int angle)
+	List<Field> getChain(Field origin, byte angle)
 	{
 		List<Field> chain = new ArrayList<Field>();
 		chain.add(origin);
@@ -164,7 +164,7 @@ public class Board implements Serializable
 	public List<Movement> possibleMoves(Field src)
 	{
 		List<Movement> movs = new ArrayList<Movement>();
-		for (int ang = 0; ang < 8; ang++)
+		for (byte ang = 0; ang < 8; ang++)
 		{
 			Movement curr = new Movement(src, ang);
 			while (isExecutable(curr))
@@ -214,7 +214,7 @@ public class Board implements Serializable
 			for(int column=0;column<size;column++) {
 				if(tab[row][column] == id) {
 					src = new Field(row, column);
-					for (int ang = 0; ang < 8; ang++) {
+					for (byte ang = 0; ang < 8; ang++) {
 						curr = new Movement(src, ang);
 						while (isExecutable(curr)) {
 							transitions.add(new Transition(this, curr));

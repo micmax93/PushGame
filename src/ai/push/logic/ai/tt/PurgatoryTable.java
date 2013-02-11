@@ -71,6 +71,24 @@ public class PurgatoryTable implements TranspositionHashStorage {
 	public void clearAll() {
 		transpositions.clear();		
 	}
+
+	@Override
+	public Transposition get(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void put(String key, Transposition t) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void remove(String key) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 

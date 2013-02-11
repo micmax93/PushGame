@@ -22,7 +22,7 @@ public class GreedyAI extends AbstractAI {
 		oracle = new DistancesEgoisticOracle(1, 2);
 		usingDelay=true;
 	}
-
+	
 	@Override
 	/**
 	 * Algorym wybiera zach³annie najbardziej korzystny ruch.

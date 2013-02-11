@@ -247,13 +247,13 @@ class FSAlphaBetaTTThread extends Thread {
 		*/
 		
 		StringBuilder hash = new StringBuilder();
-		if (transition.mainMove != null) {
+		/*if (transition.mainMove != null) {
 			hash.append(transition.mainMove.angle);
 			//hash.append(transition.mainMove.distance);
 		}
 		else
 			hash.append(4);
-		
+		*/
 		int size = transition.out.getWidth() - 1;
 		for (int r = size; r >= 0; --r) {
 			for (int c = size; c >= 0; --c) {

@@ -12,6 +12,9 @@ public class AIFactory
 	static final public String RANDOM_AI="AI losowy";
 	static final public String FS_ALPHA_BETA = "AI alfa-beta FS";
 	static final public String FS_ALPHA_BETA_TT = "AI alfa-beta FS TT";
+	static final public String BLS_TEST = "Algo BLS";
+	static final public String ELF_TEST = "Algo ELF";
+	
 	
 	static public String algoAI1=GREEDY_AI;
 	static public Integer depthAI1=4;
@@ -26,6 +29,8 @@ public class AIFactory
 		cb.addItem(ALPHA_BETA_AI);
 		cb.addItem(FS_ALPHA_BETA);
 		cb.addItem(FS_ALPHA_BETA_TT);
+		cb.addItem(ELF_TEST);
+		cb.addItem(BLS_TEST);
 	}
 	
 	static public void loadDepths(int aiID,String algo,JComboBox<Integer> cb)
@@ -103,6 +108,16 @@ public class AIFactory
 		{
 			result=new GreedyAI(logic, player);
 		}
+		//------------------------------------------------------------
+							else if(ai==BLS_TEST)
+							{
+								result=new BlsAI(logic, player);
+							}
+							else if(ai==ELF_TEST)
+							{
+								result=new ElfAI(logic, player);
+							}
+		//------------------------------------------------------------
 		else if(ai==ALPHA_BETA_AI)
 		{
 			result=new AlphaBetaAI(logic, player);

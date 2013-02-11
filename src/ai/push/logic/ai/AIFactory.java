@@ -18,7 +18,7 @@ public class AIFactory
 	
 	static public String algoAI1=GREEDY_AI;
 	static public Integer depthAI1=4;
-	static public String algoAI2=FS_ALPHA_BETA_TT;
+	static public String algoAI2=ELF_TEST;
 	static public Integer depthAI2=6;
 	
 	

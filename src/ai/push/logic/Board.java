@@ -10,7 +10,7 @@ public class Board implements Serializable
 {
 	private static final long serialVersionUID = 888670286751254258L;
 	public byte tab[][];
-	final byte size,rowcount;
+	public final byte size,rowcount;
 
 	/**
 	 * Zwraca wartoœæ pola na szachownicy.

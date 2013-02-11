@@ -94,6 +94,8 @@ public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 		boolean debug = false;
 
 		for (int i = 0; i < list.size(); i += iterStep) {
+			System.out.println("->" + i);
+			
 			if (debug)
 				System.out.println("->" + i);
 
@@ -201,11 +203,72 @@ class FSAlphaBetaTTThread extends Thread {
 			return oracle.getProphecy(transition, player);
 		}
 		
-		System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
+		//System.out.println("MAGIC_TABLE_SIZE = " + magicTable.size());
 		
 		int prevAlpha = alpha;
 		
-		Transposition t = magicTable.get(transition.out); // TODO
+		//long startTime = System.nanoTime(); 
+		
+		/*
+		char[] hash = new char[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
+		int size = transition.out.getWidth() - 1;
+		for (int r = size; r >= 0; --r) {
+			for (int c = size; c >= 0; --c) {
+				if (transition.out.tab[r][c] == 1) {
+					hash[r+1] <<= 2;
+					hash[r+1] |= 0b01;
+				}
+				else if (transition.out.tab[r][c] == 2) {
+					hash[r+1] <<= 2;
+					hash[r+1] |= 0b10;
+				}
+				else {
+					hash[r+1] <<= 2;
+				}
+			}
+		}
+		//hash[0] = (char) 
+		if (transition.mainMove != null)
+			hash[0] = (char) (transition.mainMove.angle + transition.mainMove.distance);
+		else
+			hash[0] = 42;
+		*/
+		/*
+		if (transition.mainMove != null)		
+			System.out.println(transition.mainMove.angle);
+		else
+			System.out.println("OH GOD WHY?");
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+		
+		StringBuilder hash = new StringBuilder();
+		if (transition.mainMove != null) {
+			hash.append(transition.mainMove.angle);
+			//hash.append(transition.mainMove.distance);
+		}
+		else
+			hash.append(4);
+		
+		int size = transition.out.getWidth() - 1;
+		for (int r = size; r >= 0; --r) {
+			for (int c = size; c >= 0; --c) {
+				hash.append(String.valueOf(transition.out.tab[r][c]));
+			}
+		}
+
+		String hashCode = hash.toString();
+		
+		//long estimatedTime = System.nanoTime() - startTime;
+		//System.out.println("HASH_BUILD_COST: " + estimatedTime);
+		
+		//Transposition t = magicTable.get(transition.out); // TODO
+		Transposition t = magicTable.get(hashCode); // TODO
+		
 		if (t != null) { // jeœli znaleziono coœ w tablicy transpozycji
 			if (t.getDepth() >= depth) { // i wynik mo¿e mieæ znaczenie na tym poziomie
 				if (t.getType() == Transposition.VALUE_TYPE.LOWER)
@@ -227,6 +290,14 @@ class FSAlphaBetaTTThread extends Thread {
 		}
 		moves.addAll(transition.getNextGeneration(player));
 		
+		if (player == 1) {
+			Collections.sort(moves, new TransitionComparator(oracle,
+					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
+		} else {
+			Collections.sort(moves, new TransitionComparator(oracle,
+					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
+		}
+		
 		int best = Integer.MIN_VALUE;
 		Transition nextBest = null;
 
@@ -247,7 +318,8 @@ class FSAlphaBetaTTThread extends Thread {
 		moves.clear();
 		
 		if (nextBest != null) { //  && depth > 1
-			magicTable.put(transition.out, new Transposition(best, depth, prevAlpha, beta, nextBest));
+//			magicTable.put(transition.out, new Transposition(best, depth, prevAlpha, beta, nextBest));
+			magicTable.put(hashCode, new Transposition(best, depth, prevAlpha, beta, nextBest));
 		}
 
 		return best;

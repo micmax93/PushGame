@@ -111,7 +111,7 @@ public class Checker
 	{
 		g.setColor(Color.GRAY);
 		g.fillRect(0, 0, size * scale, size * scale);
-		int board[][] = game.getTab();
+		byte board[][] = game.getTab();
 
 		for (int row = 0; row < size; row++)
 		{

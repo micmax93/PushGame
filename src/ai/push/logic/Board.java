@@ -9,8 +9,8 @@ import java.io.Serializable;
 public class Board implements Serializable
 {
 	private static final long serialVersionUID = 888670286751254258L;
-	public int tab[][];
-	final int size,rowcount;
+	public byte tab[][];
+	final byte size,rowcount;
 
 	/**
 	 * Zwraca wartoœæ pola na szachownicy.
@@ -19,7 +19,7 @@ public class Board implements Serializable
 	 * @return
 	 * Wartoœæ podanego Pola.
 	 */
-	public int getValue(Field p)
+	public byte getValue(Field p)
 	{
 		return tab[p.row][p.column];
 	}
@@ -39,7 +39,7 @@ public class Board implements Serializable
 	 * @param val
 	 * Wartoœæ nadawana polu.
 	 */
-	public void setValue(Field p, int val)
+	public void setValue(Field p, byte val)
 	{
 		tab[p.row][p.column] = val;
 	}
@@ -49,9 +49,9 @@ public class Board implements Serializable
 	 */
 	public Board()
 	{
-		size = Settings.size;
-		rowcount=Settings.rowCount;
-		tab = new int[size][size];
+		size = (byte) Settings.size;
+		rowcount=(byte) Settings.rowCount;
+		tab = new byte[size][size];
 		for (int w = 0; w < size; w++)
 		{
 			int beg = Settings.rowCount;
@@ -83,7 +83,7 @@ public class Board implements Serializable
 	{
 		size=copy.size;
 		rowcount=copy.rowcount;
-		tab=new int[size][size];
+		tab=new byte[size][size];
 		for(int row=0;row<size;row++)
 		{
 			for(int column=0;column<size;column++)
@@ -102,7 +102,7 @@ public class Board implements Serializable
 	 * @return
 	 * Lista pól nale¿¹cych do szeregu.
 	 */
-	List<Field> getChain(Field origin, int angle)
+	List<Field> getChain(Field origin, byte angle)
 	{
 		List<Field> chain = new ArrayList<Field>();
 		chain.add(origin);
@@ -139,7 +139,7 @@ public class Board implements Serializable
 		}
 		List<Field> lst = getChain(mov.origin, mov.angle);
 		Field last = lst.get(lst.size() - 1);
-		for (int d = 1; d <= mov.distance; d++)
+		for (byte d = 1; d <= mov.distance; d++)
 		{
 			Movement lastMove = new Movement(last, mov.angle, d);
 			if (!lastMove.isValid())
@@ -151,7 +151,7 @@ public class Board implements Serializable
 				return false;
 			}
 		}
-		mov.chainSize=lst.size();
+		mov.chainSize=(byte) lst.size();
 		return true;
 	}
 	
@@ -165,7 +165,7 @@ public class Board implements Serializable
 	public List<Movement> possibleMoves(Field src)
 	{
 		List<Movement> movs = new ArrayList<Movement>();
-		for (int ang = 0; ang < 8; ang++)
+		for (byte ang = 0; ang < 8; ang++)
 		{
 			Movement curr = new Movement(src, ang);
 			while (isExecutable(curr))
@@ -188,13 +188,13 @@ public class Board implements Serializable
 		{
 			return false;
 		}
-		int id = getValue(mov.origin);
+		byte id = getValue(mov.origin);
 		List<Field> chain = getChain(mov.origin, mov.angle);
 		for (int i = chain.size() - 1; i >= 0; i--)
 		{
 			Movement curr = new Movement(chain.get(i), mov.angle, mov.distance);
 			setValue(curr.destination, id);
-			setValue(curr.origin, 0);
+			setValue(curr.origin, (byte)0);
 		}
 		return true;
 	}	
@@ -215,7 +215,7 @@ public class Board implements Serializable
 			for(int column=0;column<size;column++) {
 				if(tab[row][column] == id) {
 					src = new Field(row, column);
-					for (int ang = 0; ang < 8; ang++) {
+					for (byte ang = 0; ang < 8; ang++) {
 						curr = new Movement(src, ang);
 						while (isExecutable(curr)) {
 							transitions.add(new Transition(this, curr));

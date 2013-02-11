@@ -7,16 +7,23 @@ package ai.push.logic;
  */
 public class Field
 {
-	public int row, column;
+	public byte row, column;
 
 	public Field()
 	{
 	}
 
-	public Field(int row, int column)
+	public Field(byte row, byte column)
 	{
 		this.row = row;
 		this.column = column;
+	}
+	
+
+	public Field(int row, int column)
+	{
+		this.row = (byte) row;
+		this.column = (byte) column;
 	}
 	
 	/**

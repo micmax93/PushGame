@@ -17,11 +17,11 @@ import ai.push.logic.oracle.Oracle;
 
 public class Logic {
 	AbstractAI ai1, ai2;
-	final int size;
+	final byte size;
 	/**
 	 * Identyfikarot u¿ytkownika który ma tera ruch.
 	 */
-	public int turn;
+	public byte turn;
 	protected Board board;
 	/**
 	 * Przedstawia czy zasz³y jakieœ zmiany na planszy.
@@ -34,13 +34,13 @@ public class Logic {
 	/**
 	 * Identyfikator zwyciêzcy, w trakcie gry 0.
 	 */
-	public int winner;
+	public byte winner;
 
 	/**
 	 * Konstruktor inicjalizuj¹cy podstawowe pola.
 	 */
 	public Logic() {
-		this.size = Settings.size;
+		this.size = (byte) Settings.size;
 		board = new Board();
 		turn = 2;
 		edited = new Boolean(true);
@@ -53,7 +53,7 @@ public class Logic {
 	 * @return tablica 2D intów zawieraj¹ca odpowiednik aktualnego stanu
 	 *         planszy.
 	 */
-	public int[][] getTab() {
+	public byte[][] getTab() {
 		return board.tab;
 	}
 
@@ -91,7 +91,7 @@ public class Logic {
 	/**
 	 * Zwraca identyfikator przeciwnika.
 	 */
-	public int enemyID() {
+	public byte enemyID() {
 		if (turn == 1) {
 			return 2;
 		} else {
@@ -104,7 +104,7 @@ public class Logic {
 	 * 
 	 * @return Identyfikator zwyciêzcy, je¿eli brak to 0.
 	 */
-	public int hasFinished() {
+	public byte hasFinished() {
 		boolean won1 = true, won2 = true;
 		for (int row = 0; row < size; row++) {
 			int beg = Settings.rowCount;
@@ -206,7 +206,7 @@ public class Logic {
 	public void loadFromFile(String fname) throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(fname));
-	    turn = (int) in.readObject();
+	    turn = (byte) in.readObject();
 	    board = (Board) in.readObject();
 	    in.close();
 	    Settings.size=board.size;

@@ -19,6 +19,7 @@ public abstract class AbstractAI extends Thread {
 	protected List<Transition> list;
 	protected Movement result;
 	protected int delay;
+	protected boolean usingDelay=false;
 	protected Oracle.PLAYER player;
 	protected Oracle.PLAYER opponent;
 	protected Oracle oracle;
@@ -78,7 +79,7 @@ public abstract class AbstractAI extends Thread {
 		list = game.generateTransitions();
 		algorithm();
 
-		if (delay != 0) {
+		if ((usingDelay)&&(delay != 0)) {
 			try {
 				Thread.sleep(delay);
 			} catch (InterruptedException e) {
@@ -88,6 +89,7 @@ public abstract class AbstractAI extends Thread {
 		}
 		
 		game.executeMove(result);
+		Runtime.getRuntime().gc();
 		game.endTurn();
 	}
 }

@@ -36,20 +36,22 @@ public class Movement
 		if ((angle > 0) && (angle < 4)) {
 			horiz = 1;
 		}
-		if ((angle > 4) && (angle < 8)) {
+		else if ((angle > 4) && (angle < 8)) {
 			horiz = -1;
 		}
 
 		if ((angle < 2) || (angle > 6)) {
 			vert = -1;
 		}
-		if ((angle > 2) && (angle < 6)) {
+		else if ((angle > 2) && (angle < 6)) {
 			vert = 1;
 		}
 
-		destination = new Field();
-		destination.row = (byte) (origin.row + distance * vert);
-		destination.column = (byte) (origin.column + distance * horiz);
+		// TODO check correctness!
+//		destination = new Field();
+//		destination.row = (byte) (origin.row + distance * vert);
+//		destination.column = (byte) (origin.column + distance * horiz);
+		destination = FieldsStaticStorage.getField(origin.row + distance * vert, origin.column + distance * horiz);
 	}
 	
 	/**
@@ -133,7 +135,24 @@ public class Movement
 	/**
 	 * Sprawdza czy ruch jest poprawny, ale bez uwzglêdnienia innych pionków.
 	 */
+	
 	public boolean isValid() {
+		// wersja 3
+		if (distance < 4 && destination != null)
+			return true;
+		return false;
+		
+		/*
+		// wersja 2
+		if (destination == null)
+			return false;
+		if ((distance > 0) && (distance <= 3))
+			return true;
+		return false;
+		*/
+		
+		/*
+		// wersja 1
 		if ((angle >= 0) && (angle < 8)) {
 			if ((distance > 0) && (distance <= 3)) {
 				if (origin.isValid() && destination.isValid()) {
@@ -142,7 +161,9 @@ public class Movement
 			}
 		}
 		return false;
+		*/
 	}
+	
 
 	/**
 	 * Generuje ruch w którym pole docelowe jest przesuniête o pole dalej.

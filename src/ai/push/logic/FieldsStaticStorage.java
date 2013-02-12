@@ -3,14 +3,15 @@ package ai.push.logic;
 public class FieldsStaticStorage {
 
 	private static Field[][] fields = null;
+	private static int size = 8;
 
 	private FieldsStaticStorage() {	}
 
 	public static Field getField(byte row, byte column) {
 		if (fields == null) {
-			fields = new Field[12][12];
-			for (byte i = 0; i < 12; ++i) {
-				for (byte j = 0; j < 12; ++j) {
+			fields = new Field[size][size];
+			for (byte i = 0; i < size; ++i) {
+				for (byte j = 0; j < size; ++j) {
 					fields[i][j] = new Field(i, j);
 				}
 			}
@@ -25,9 +26,9 @@ public class FieldsStaticStorage {
 	
 	public static Field getField(int row, int column) {
 		if (fields == null) {
-			fields = new Field[12][12];
-			for (byte i = 0; i < 12; ++i) {
-				for (byte j = 0; j < 12; ++j) {
+			fields = new Field[size][size];
+			for (byte i = 0; i < size; ++i) {
+				for (byte j = 0; j < size; ++j) {
 					fields[i][j] = new Field(i, j);
 				}
 			}

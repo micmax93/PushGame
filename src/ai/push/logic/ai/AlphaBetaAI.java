@@ -221,7 +221,7 @@ class AlphaBetaThread extends Thread {
 		//System.out.println("GENEROWANIE NASTÊPNIKÓW:\t" + elapsedTime + "ns");
 		//System.out.println("SIZE =  " + moves.size());
 		
-		startTime = System.nanoTime();
+		//startTime = System.nanoTime();
 		if (player == 1) {
 			Collections.sort(moves, new TransitionComparator(
 					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
@@ -229,8 +229,8 @@ class AlphaBetaThread extends Thread {
 			Collections.sort(moves, new TransitionComparator(
 					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
 		}
-		elapsedTime = System.nanoTime() - startTime;
-		System.out.println("SORTOWANIE DZIECI:\t\t" + elapsedTime + "ns");
+		//elapsedTime = System.nanoTime() - startTime;
+		//System.out.println("SORTOWANIE DZIECI:\t\t" + elapsedTime + "ns");
 		
 		int value;
 		for (Transition m : moves) {

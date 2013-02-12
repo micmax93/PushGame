@@ -139,19 +139,24 @@ public class Board implements Serializable
 		{
 			return false;
 		}
+		/*
 		if (!mov.isValid())
 		{
 			return false;
 		}
+		*/
+		
 		List<Field> lst = getChain(mov.origin, mov.angle);
 		Field last = lst.get(lst.size() - 1);
 		for (byte d = 1; d <= mov.distance; d++)
 		{
 			Movement lastMove = new Movement(last, mov.angle, d);
+			///*
 			if (!lastMove.isValid())
 			{
 				return false;
 			}
+			//*/
 			if (getValue(lastMove.destination) != 0)
 			{
 				return false;
@@ -218,7 +223,7 @@ public class Board implements Serializable
 	 * Lista mo¿liwych ruchów.
 	 */
 	public List<Transition> generateTransitions(int id) {
-		List<Transition> transitions = new ArrayList<Transition>(150);
+		List<Transition> transitions = new ArrayList<Transition>(100);
 		Movement curr = null;
 		Field src = null;
 		for(int row=0;row<size;row++) {

@@ -7,11 +7,12 @@ package ai.push.logic;
  */
 public class Field
 {
-	public byte row, column;
+	public byte row;
+	public byte column;
 
-	public Field()
-	{
-	}
+	//public Field()
+	//{
+	//}
 
 	public Field(byte row, byte column)
 	{
@@ -26,7 +27,7 @@ public class Field
 		this.column = (byte) column;
 	}
 	
-	/**
+	/*
 	 * Konstruktor kopiuj¹cy
 	 * @param field
 	 */
@@ -40,6 +41,7 @@ public class Field
 	/**
 	 * Sprawdza czy wspó³rzêdne s¹ poprawne, czyli czy znajduj¹ siê na szachownicy.
 	 */
+	/*
 	public boolean isValid()
 	{
 		if ((row >= 0) && (column >= 0)  && (row < Settings.size) && (column < Settings.size)) {
@@ -54,4 +56,5 @@ public class Field
 //		}
 		return false;
 	}
+	*/
 }

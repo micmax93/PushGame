@@ -2,6 +2,7 @@ package ai.push.logic.oracle;
 
 import ai.push.logic.Board;
 import ai.push.logic.Field;
+import ai.push.logic.FieldsStaticStorage;
 import ai.push.logic.Transition;
 
 /**
@@ -38,7 +39,8 @@ public class DistancesEgoisticOracle extends Oracle {
 		if (player == PLAYER.PLAYER1) {
 			for (int r = 0; r < board.getWidth(); ++r) {
 				for (int c = 0; c < board.getWidth(); ++c) {
-					if (board.getValue(new Field(r, c)) == player1) {
+//					if (board.getValue(new Field(r, c)) == player1) {
+				if (board.getValue(FieldsStaticStorage.getField(r, c)) == player1) {
 						markPlayer += r;
 					}
 				}
@@ -46,7 +48,8 @@ public class DistancesEgoisticOracle extends Oracle {
 		} else {
 			for (int r = 0; r < board.getWidth(); ++r) {
 				for (int c = 0; c < board.getWidth(); ++c) {
-					if (board.getValue(new Field(r, c)) == player2) {
+//					if (board.getValue(new Field(r, c)) == player2) {
+					if (board.getValue(FieldsStaticStorage.getField(r, c)) == player2) {
 						markPlayer += board.getWidth() - r - 1;
 					}
 				}

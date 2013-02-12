@@ -121,8 +121,10 @@ public class Movement
 	}
 	
 	public Movement(Movement movement) {
-		this.origin = new Field(movement.origin);
-		this.destination = new Field(movement.destination);
+//		this.origin = new Field(movement.origin);
+		this.origin = movement.origin;
+//		this.destination = new Field(movement.destination);
+		this.destination = movement.destination;
 		this.distance = movement.distance;
 		this.angle = movement.angle;
 	}

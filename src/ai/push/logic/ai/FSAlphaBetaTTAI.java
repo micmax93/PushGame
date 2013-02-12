@@ -83,10 +83,10 @@ public class FSAlphaBetaTTAI extends AbstractAI implements ThreadEndEvent {
 		// System.out.println(new Date() + " BEG");
 
 		if (player == Oracle.PLAYER.PLAYER1) {
-			Collections.sort(list, new TransitionComparator(oracle,
+			Collections.sort(list, new TransitionComparator(
 					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
 		} else {
-			Collections.sort(list, new TransitionComparator(oracle,
+			Collections.sort(list, new TransitionComparator(
 					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
 		}
 

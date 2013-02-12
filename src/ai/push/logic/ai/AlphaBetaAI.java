@@ -8,6 +8,7 @@ import ai.push.logic.Logic;
 import ai.push.logic.Settings;
 import ai.push.logic.Transition;
 import ai.push.logic.oracle.DelphiOracle;
+import ai.push.logic.oracle.LogarithmicOracle;
 import ai.push.logic.oracle.Oracle;
 import ai.push.logic.oracle.TransitionComparator;
 
@@ -16,12 +17,19 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 	private int[] threadReturn;
 	private AlphaBetaThread[] threads;
 	private boolean forceOneThread = false;
+	private Oracle oracle2;
 	
 	public AlphaBetaAI(Logic logic, Oracle.PLAYER player) {
 		super(logic, player);
 //		oracle = new RankOracle(1, 2);
 //		oracle = new LogarithmicOracle(1, 2);
+		//oracle = new DelphiOracle(1, 2);
+		//oracle = new LogarithmicOracle(1, 2);
+		//oracle2 = new LogarithmicOracle(1, 2);
 		oracle = new DelphiOracle(1, 2);
+		oracle2 = new DelphiOracle(1, 2);
+		
+		
 //		oracle = new ExponentialOracle(1, 2); // tu ustawiasz wyroczniê
 		threadReturn = new int[2];
 		threads = new AlphaBetaThread[2];
@@ -73,10 +81,10 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 		//System.out.println(new Date() + " BEG");
 		
 		if (player == Oracle.PLAYER.PLAYER1) {
-			Collections.sort(list, new TransitionComparator(oracle,
+			Collections.sort(list, new TransitionComparator(
 					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
 		} else {
-			Collections.sort(list, new TransitionComparator(oracle,
+			Collections.sort(list, new TransitionComparator(
 					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
 		}
 
@@ -90,7 +98,7 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 		boolean debug = false;
 		
 		for (int i = 0; i < list.size(); i += iterStep) {
-			if (debug)
+			//if (debug)
 				System.out.println("->" + i);
 
 				threads[0] = new AlphaBetaThread(0, this, new DelphiOracle(1, 2), new Transition(list.get(i)), maxDepth - 1, -beta, -alpha, 3 - plr);
@@ -114,6 +122,7 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 						System.out.println("i: " + i + " NOWA ALFA: " + alpha);
 				}
 				if (alpha >= beta) {
+					System.out.println("ODCIÊCIE!!!!!!!!!");
 					break;
 				}
 				if (threadReturn[0] > decisionVal)
@@ -128,6 +137,7 @@ public class AlphaBetaAI extends AbstractAI  implements ThreadEndEvent {
 							System.out.println("i: " + i + " NOWA ALFA: " + alpha);
 					}
 					if (alpha >= beta) {
+						System.out.println("ODCIÊCIE!!!!!!!!!");
 						break;
 					}
 					if (threadReturn[1] > decisionVal)
@@ -167,6 +177,8 @@ class AlphaBetaThread extends Thread {
 	private int beta;
 	private int player;
 	
+	private int cutOffs = 0;
+	
 	public AlphaBetaThread() {}
 
 	public AlphaBetaThread(int threadId, ThreadEndEvent event, Oracle oracle, Transition transition, int depth, int alpha,
@@ -182,6 +194,19 @@ class AlphaBetaThread extends Thread {
 		this.player = player;
 	}
 	
+	private boolean checkUnique(List<Transition> transitions) {
+		boolean unique = true;
+		for (int i=0; i<transitions.size(); ++i) {
+			for (int j = i+1; j <transitions.size(); ++j) {
+				if (transitions.get(i).out.hash64 == transitions.get(j).out.hash64) {
+					unique = false;
+					return unique;
+				}
+			}
+		}
+		return unique;
+	}
+	
 	public int alphaBeta(Transition transition, int depth, int alpha, int beta,
 			int player) {
 		if ((depth == 0) || AlphaBetaAI.isGameOver(transition.in)) {
@@ -189,15 +214,23 @@ class AlphaBetaThread extends Thread {
 			//System.out.println(new Date() + " END");
 			return oracle.getProphecy(transition, player); // player
 		}
+		long startTime, elapsedTime;
+		//startTime = System.nanoTime();
 		List<Transition> moves = transition.getNextGeneration(player);
+		//elapsedTime = System.nanoTime() - startTime;
+		//System.out.println("GENEROWANIE NASTÊPNIKÓW:\t" + elapsedTime + "ns");
+		//System.out.println("SIZE =  " + moves.size());
 		
+		startTime = System.nanoTime();
 		if (player == 1) {
-			Collections.sort(moves, new TransitionComparator(oracle,
+			Collections.sort(moves, new TransitionComparator(
 					Oracle.PLAYER.PLAYER1, TransitionComparator.ORDER.DESC));
 		} else {
-			Collections.sort(moves, new TransitionComparator(oracle,
+			Collections.sort(moves, new TransitionComparator(
 					Oracle.PLAYER.PLAYER2, TransitionComparator.ORDER.DESC));
 		}
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("SORTOWANIE DZIECI:\t\t" + elapsedTime + "ns");
 		
 		int value;
 		for (Transition m : moves) {
@@ -205,11 +238,14 @@ class AlphaBetaThread extends Thread {
 			if (value > alpha)
 				alpha = value;
 			if (alpha >= beta) {
-				// System.out.println("ODCIÊCIE! @ LVL: " + depth);
+				/*if (depth > 3) {
+					++cutOffs;
+					System.out.println("ODCIÊCIE! @ LVL: " + depth + " # " + cutOffs);
+				}*/
 				return beta;
 			}
 		}
-		moves.clear();
+		//moves.clear();
 		
 		return alpha;
 	}

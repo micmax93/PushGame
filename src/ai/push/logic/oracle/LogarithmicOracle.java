@@ -6,7 +6,7 @@ import ai.push.logic.Transition;
 public class LogarithmicOracle extends Oracle {
 
 	private static final double BASE = 1.2f; // 1.2
-	private static final double SCALE = 70.0f;
+	private static final double SCALE = 100.0f;
 	private static final double LOG_BASE = Math.log(BASE);
 
 	public LogarithmicOracle(int player1, int player2) {

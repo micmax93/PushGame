@@ -218,13 +218,14 @@ public class Board implements Serializable
 	 * Lista mo¿liwych ruchów.
 	 */
 	public List<Transition> generateTransitions(int id) {
-		List<Transition> transitions = new ArrayList<Transition>(250);
+		List<Transition> transitions = new ArrayList<Transition>(150);
 		Movement curr = null;
 		Field src = null;
 		for(int row=0;row<size;row++) {
 			for(int column=0;column<size;column++) {
 				if(tab[row][column] == id) {
-					src = new Field(row, column);
+					//src = new Field(row, column);
+					src = FieldsStaticStorage.getField(row, column);
 					for (byte ang = 0; ang < 8; ang++) {
 						curr = new Movement(src, ang);
 						while (isExecutable(curr)) {
@@ -254,7 +255,8 @@ public class Board implements Serializable
 				{
 					if(tab[i][j]==id)
 					{
-						srcFields[id].addField(new Field(i, j));
+						//srcFields[id].addField(new Field(i, j));
+						srcFields[id].addField(FieldsStaticStorage.getField(i, j));
 					}
 				}
 			}	
@@ -296,7 +298,9 @@ public class Board implements Serializable
 			{
 				if(tab[row][column]==id)
 				{
-					movs = possibleMoves(new Field(row,column));
+					//movs = possibleMoves(new Field(row,column));
+					movs = possibleMoves(FieldsStaticStorage.getField(row,column));
+					
 					for (Movement m : movs) {
 						result.add(new Transition(this, m));
 					}

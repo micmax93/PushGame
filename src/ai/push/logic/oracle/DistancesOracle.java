@@ -2,6 +2,7 @@ package ai.push.logic.oracle;
 
 import ai.push.logic.Board;
 import ai.push.logic.Field;
+import ai.push.logic.FieldsStaticStorage;
 import ai.push.logic.Transition;
 
 /**
@@ -38,9 +39,11 @@ public class DistancesOracle extends Oracle {
 
 		for (int r = 0; r < board.getWidth(); ++r) {
 			for (int c = 0; c < board.getWidth(); ++c) {
-				if (board.getValue(new Field(r, c)) == player1) {
+//				if (board.getValue(new Field(r, c)) == player1) {
+				if (board.getValue(FieldsStaticStorage.getField(r, c)) == player1) {
 					markPlayer1 += r;
-				} else if (board.getValue(new Field(r, c)) == player2) {
+//				} else if (board.getValue(new Field(r, c)) == player2) {
+				} else if (board.getValue(FieldsStaticStorage.getField(r, c)) == player2) {
 					markPlayer2 += board.getWidth() - r - 1;
 				}
 			}

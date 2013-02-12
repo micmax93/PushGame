@@ -24,7 +24,8 @@ public class DummyLogic extends Logic
 			{
 				if (board.tab[i][j] == 0)
 				{
-					destinations.add(new Field(i, j));
+//					destinations.add(new Field(i, j));
+					destinations.add(FieldsStaticStorage.getField(i, j));
 				}
 			}
 		}

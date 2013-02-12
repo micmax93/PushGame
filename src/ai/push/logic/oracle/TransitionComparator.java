@@ -41,6 +41,12 @@ public class TransitionComparator implements Comparator<Transition> {
 		this.comparisionOrder = ORDER.ASC;
 	}
 
+	public TransitionComparator(Oracle.PLAYER player, ORDER order) {
+		this.oracle = null;
+		this.player = player;
+		this.comparisionOrder = order;
+	}
+	
 	/**
 	 * Konstruktor tworz¹cy komparator w wybranym porz¹dku.
 	 * 
